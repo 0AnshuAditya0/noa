@@ -54,6 +54,9 @@ def parse_submissions(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 class CodeforcesAdapter(PlatformAdapter):
     platform = "codeforces"
+    verification_field_label = "organization"
+    NATIVE_DAILY = False
+    AUTHORITATIVE_PROFILE_STATS = False
 
     async def _call(self, method: str, params: dict[str, Any]) -> Any:
         global _last_call
@@ -104,3 +107,9 @@ class CodeforcesAdapter(PlatformAdapter):
         if since:
             solves = [s for s in solves if s["solved_at"] >= since]
         return solves
+
+    async def fetch_daily_counts(self, handle: str) -> list[tuple[str, int]] | None:
+        """Derived from the full solve history — no extra API calls."""
+        from platforms.base import count_by_date
+
+        return count_by_date(await self.fetch_solves(handle))

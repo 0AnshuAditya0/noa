@@ -95,6 +95,45 @@ def init_db() -> None:
         conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_solves_user_date ON solves (user_id, solved_at)"
         )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS platform_daily (
+                user_id INTEGER NOT NULL,
+                platform TEXT NOT NULL,
+                date TEXT NOT NULL,
+                count INTEGER NOT NULL DEFAULT 0,
+                UNIQUE (user_id, platform, date)
+            )
+            """
+        )
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_daily_user_date ON platform_daily (user_id, date)")
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS stats_snapshots (
+                user_id INTEGER NOT NULL,
+                platform TEXT NOT NULL,
+                date TEXT NOT NULL,
+                total_solved INTEGER NOT NULL DEFAULT 0,
+                UNIQUE (user_id, platform, date)
+            )
+            """
+        )
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_snap_user_date ON stats_snapshots (user_id, date)")
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS dsa_learned (
+                user_id INTEGER NOT NULL,
+                entry_id TEXT NOT NULL,
+                learned_at TEXT NOT NULL,
+                UNIQUE (user_id, entry_id)
+            )
+            """
+        )
+        cols = [row[1] for row in conn.execute("PRAGMA table_info(platform_stats)")]
+        if "sync_ok" not in cols:
+            conn.execute("ALTER TABLE platform_stats ADD COLUMN sync_ok INTEGER NOT NULL DEFAULT 1")
+        if "last_error" not in cols:
+            conn.execute("ALTER TABLE platform_stats ADD COLUMN last_error TEXT")
 
 
 def get_user(user_id: int) -> dict[str, Any] | None:
@@ -383,7 +422,7 @@ def set_verified(user_id: int, platform: str) -> bool:
 
 
 def unlink_account(user_id: int, platform: str) -> bool:
-    """Remove the link plus its cached solves/stats."""
+    """Remove the link plus its cached solves/stats/daily rows."""
     init_db()
     with _connect() as conn:
         cur = conn.execute(
@@ -393,6 +432,7 @@ def unlink_account(user_id: int, platform: str) -> bool:
         removed = cur.rowcount > 0
         conn.execute("DELETE FROM solves WHERE user_id = ? AND platform = ?", (user_id, platform))
         conn.execute("DELETE FROM platform_stats WHERE user_id = ? AND platform = ?", (user_id, platform))
+        conn.execute("DELETE FROM platform_daily WHERE user_id = ? AND platform = ?", (user_id, platform))
         return removed
 
 
@@ -443,16 +483,37 @@ def rebuild_platform_stats(
             (user_id, platform),
         )
         counts = {row[0]: row[1] for row in cur.fetchall()}
-        easy = counts.get("easy", 0)
-        medium = counts.get("medium", 0)
-        hard = counts.get("hard", 0)
-        total = easy + medium + hard
-        now = _now()
+        return write_platform_stats(
+            user_id, platform,
+            total=counts.get("easy", 0) + counts.get("medium", 0) + counts.get("hard", 0),
+            easy=counts.get("easy", 0),
+            medium=counts.get("medium", 0),
+            hard=counts.get("hard", 0),
+            rating=rating,
+            max_rating=max_rating,
+        )
+
+
+def write_platform_stats(
+    user_id: int,
+    platform: str,
+    total: int,
+    easy: int,
+    medium: int,
+    hard: int,
+    rating: int | None = None,
+    max_rating: int | None = None,
+) -> dict[str, Any]:
+    """Cache one authoritative stats row (e.g. from a profile payload). Marks sync healthy."""
+    init_db()
+    now = _now()
+    with _connect() as conn:
         conn.execute(
             """
             INSERT OR REPLACE INTO platform_stats
-                (user_id, platform, total_solved, easy, medium, hard, rating, max_rating, last_synced)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (user_id, platform, total_solved, easy, medium, hard, rating, max_rating,
+                 last_synced, sync_ok, last_error)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NULL)
             """,
             (user_id, platform, total, easy, medium, hard, rating, max_rating, now),
         )
@@ -469,6 +530,37 @@ def rebuild_platform_stats(
         }
 
 
+def mark_sync_failed(user_id: int, platform: str, error: str) -> None:
+    """Flag the cached row as stale. Totals/rating/last_synced are left untouched."""
+    init_db()
+    with _connect() as conn:
+        conn.execute(
+            "UPDATE platform_stats SET sync_ok = 0, last_error = ? WHERE user_id = ? AND platform = ?",
+            (error[:300], user_id, platform),
+        )
+
+
+def upsert_daily(user_id: int, platform: str, rows: list[tuple[str, int]]) -> int:
+    """Write per-day solve counts (REPLACE: counts only grow). Returns rows written."""
+    if not rows:
+        return 0
+    init_db()
+    with _connect() as conn:
+        for day, count in rows:
+            conn.execute(
+                "INSERT OR REPLACE INTO platform_daily (user_id, platform, date, count) VALUES (?, ?, ?, ?)",
+                (user_id, platform, day, count),
+            )
+    return len(rows)
+
+
+def week_start_date(days: int = 7) -> str:
+    """UTC date string of the oldest day in the trailing window (inclusive)."""
+    from datetime import timedelta
+
+    return (datetime.now(timezone.utc).date() - timedelta(days=days - 1)).isoformat()
+
+
 def get_platform_stats(user_id: int, platform: str) -> dict[str, Any] | None:
     init_db()
     with _connect() as conn:
@@ -482,51 +574,40 @@ def get_platform_stats(user_id: int, platform: str) -> dict[str, Any] | None:
 
 
 # ---- Verified-platform aggregates (coding totals / streaks / boards) ----
-# All totals join solves to verified linked_accounts, so unverified rows
-# never feed any number. Aggregates run in SQL; Python only folds the
-# resulting date lists into streak runs.
+# Totals come from cached platform_stats, streaks and week counts from
+# platform_daily. The solves table is a raw log only — it feeds nothing.
+# All queries join to verified linked_accounts, so unverified rows never
+# feed any number. Aggregates run in SQL; Python only folds date lists.
 
 
-def platform_totals(user_id: int, since: str | None = None) -> dict[str, int]:
-    """Total/easy/medium/hard across VERIFIED platforms only (SQL aggregate)."""
+def platform_totals(user_id: int) -> dict[str, int]:
+    """Total/easy/medium/hard summed across VERIFIED platforms (SQL aggregate)."""
     init_db()
     with _connect() as conn:
-        if since:
-            cur = conn.execute(
-                """
-                SELECT COUNT(*), SUM(s.difficulty = 'easy'),
-                       SUM(s.difficulty = 'medium'), SUM(s.difficulty = 'hard')
-                FROM solves s
-                JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
-                WHERE s.user_id = ? AND l.verified = 1 AND s.solved_at >= ?
-                """,
-                (user_id, since),
-            )
-        else:
-            cur = conn.execute(
-                """
-                SELECT COUNT(*), SUM(s.difficulty = 'easy'),
-                       SUM(s.difficulty = 'medium'), SUM(s.difficulty = 'hard')
-                FROM solves s
-                JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
-                WHERE s.user_id = ? AND l.verified = 1
-                """,
-                (user_id,),
-            )
+        cur = conn.execute(
+            """
+            SELECT COALESCE(SUM(ps.total_solved), 0), COALESCE(SUM(ps.easy), 0),
+                   COALESCE(SUM(ps.medium), 0), COALESCE(SUM(ps.hard), 0)
+            FROM platform_stats ps
+            JOIN linked_accounts l ON l.user_id = ps.user_id AND l.platform = ps.platform
+            WHERE ps.user_id = ? AND l.verified = 1
+            """,
+            (user_id,),
+        )
         row = cur.fetchone()
         return {"total": row[0] or 0, "easy": row[1] or 0, "medium": row[2] or 0, "hard": row[3] or 0}
 
 
 def solve_dates(user_id: int) -> list[str]:
-    """Distinct UTC solve dates for VERIFIED platforms (SQL aggregate)."""
+    """Distinct UTC active dates for VERIFIED platforms, from platform_daily."""
     init_db()
     with _connect() as conn:
         cur = conn.execute(
             """
-            SELECT DISTINCT substr(s.solved_at, 1, 10)
-            FROM solves s
-            JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
-            WHERE s.user_id = ? AND l.verified = 1
+            SELECT DISTINCT d.date
+            FROM platform_daily d
+            JOIN linked_accounts l ON l.user_id = d.user_id AND l.platform = d.platform
+            WHERE d.user_id = ? AND l.verified = 1 AND d.count > 0
             ORDER BY 1
             """,
             (user_id,),
@@ -544,12 +625,12 @@ def solve_dates_batch(user_ids: list[int]) -> dict[int, list[str]]:
         placeholders = ",".join("?" for _ in user_ids)
         cur = conn.execute(
             f"""
-            SELECT s.user_id, substr(s.solved_at, 1, 10)
-            FROM solves s
-            JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
-            WHERE s.user_id IN ({placeholders}) AND l.verified = 1
-            GROUP BY s.user_id, substr(s.solved_at, 1, 10)
-            ORDER BY s.user_id, 2
+            SELECT d.user_id, d.date
+            FROM platform_daily d
+            JOIN linked_accounts l ON l.user_id = d.user_id AND l.platform = d.platform
+            WHERE d.user_id IN ({placeholders}) AND l.verified = 1 AND d.count > 0
+            GROUP BY d.user_id, d.date
+            ORDER BY d.user_id, 2
             """,
             tuple(user_ids),
         )
@@ -589,8 +670,9 @@ def coding_streak(user_id: int) -> tuple[int, int]:
 
 
 def problems_board(since: str | None = None) -> list[dict[str, Any]]:
-    """One ordered aggregate: users WITH a verified account, ranked by total
-    solved desc, best rating desc (NULLs last), registered_at asc."""
+    """One ordered aggregate: users WITH a verified account, ranked by daily
+    total desc, best rating desc (NULLs last), registered_at asc. `since` is a
+    UTC date string (week = trailing 7 days from platform_daily)."""
     init_db()
     with _connect() as conn:
         conn.row_factory = sqlite3.Row
@@ -598,12 +680,12 @@ def problems_board(since: str | None = None) -> list[dict[str, Any]]:
             cur = conn.execute(
                 """
                 SELECT u.user_id, u.registered_at,
-                       COUNT(s.problem_id) AS total,
+                       COALESCE(SUM(d.count), 0) AS total,
                        (SELECT MAX(ps.rating) FROM platform_stats ps WHERE ps.user_id = u.user_id) AS best
                 FROM users u
                 JOIN linked_accounts l ON l.user_id = u.user_id AND l.verified = 1
-                LEFT JOIN solves s ON s.user_id = u.user_id AND s.platform = l.platform
-                    AND s.solved_at >= ?
+                LEFT JOIN platform_daily d ON d.user_id = u.user_id AND d.platform = l.platform
+                    AND d.date >= ?
                 GROUP BY u.user_id
                 ORDER BY total DESC, best DESC, u.registered_at ASC
                 """,
@@ -613,11 +695,11 @@ def problems_board(since: str | None = None) -> list[dict[str, Any]]:
             cur = conn.execute(
                 """
                 SELECT u.user_id, u.registered_at,
-                       COUNT(s.problem_id) AS total,
-                       (SELECT MAX(ps.rating) FROM platform_stats ps WHERE ps.user_id = u.user_id) AS best
+                       COALESCE(SUM(ps.total_solved), 0) AS total,
+                       (SELECT MAX(ps2.rating) FROM platform_stats ps2 WHERE ps2.user_id = u.user_id) AS best
                 FROM users u
                 JOIN linked_accounts l ON l.user_id = u.user_id AND l.verified = 1
-                LEFT JOIN solves s ON s.user_id = u.user_id AND s.platform = l.platform
+                LEFT JOIN platform_stats ps ON ps.user_id = u.user_id AND ps.platform = l.platform
                 GROUP BY u.user_id
                 ORDER BY total DESC, best DESC, u.registered_at ASC
                 """
@@ -626,7 +708,7 @@ def problems_board(since: str | None = None) -> list[dict[str, Any]]:
 
 
 def verified_platforms_batch(user_ids: list[int], since: str | None = None) -> dict[int, list[str]]:
-    """{user_id: [platforms with a counted solve in scope]}. One GROUP_CONCAT query."""
+    """{user_id: [platforms counted in scope]}. Stats for all-time, daily for weeks."""
     if not user_ids:
         return {}
     init_db()
@@ -636,25 +718,219 @@ def verified_platforms_batch(user_ids: list[int], since: str | None = None) -> d
         if since:
             cur = conn.execute(
                 f"""
-                SELECT s.user_id, GROUP_CONCAT(DISTINCT s.platform)
-                FROM solves s
-                JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
-                WHERE s.user_id IN ({placeholders}) AND l.verified = 1 AND s.solved_at >= ?
-                GROUP BY s.user_id
+                SELECT d.user_id, GROUP_CONCAT(DISTINCT d.platform)
+                FROM platform_daily d
+                JOIN linked_accounts l ON l.user_id = d.user_id AND l.platform = d.platform
+                WHERE d.user_id IN ({placeholders}) AND l.verified = 1
+                    AND d.date >= ? AND d.count > 0
+                GROUP BY d.user_id
                 """,
                 (*user_ids, since),
             )
         else:
             cur = conn.execute(
                 f"""
-                SELECT s.user_id, GROUP_CONCAT(DISTINCT s.platform)
-                FROM solves s
-                JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
-                WHERE s.user_id IN ({placeholders}) AND l.verified = 1
-                GROUP BY s.user_id
+                SELECT ps.user_id, GROUP_CONCAT(DISTINCT ps.platform)
+                FROM platform_stats ps
+                JOIN linked_accounts l ON l.user_id = ps.user_id AND l.platform = ps.platform
+                WHERE ps.user_id IN ({placeholders}) AND l.verified = 1
+                GROUP BY ps.user_id
                 """,
                 tuple(user_ids),
             )
         for uid, plats in cur.fetchall():
             out[uid] = sorted(plats.split(",")) if plats else []
     return out
+
+
+# ---- DSA library learned marks. Additive only; nothing above changes. ----
+
+
+def mark_learned(user_id: int, entry_id: str) -> bool:
+    """Mark an entry learned. Returns True if new, False if already marked."""
+    init_db()
+    with _connect() as conn:
+        cur = conn.execute(
+            "INSERT OR IGNORE INTO dsa_learned (user_id, entry_id, learned_at) VALUES (?, ?, ?)",
+            (user_id, entry_id, _now()),
+        )
+        return cur.rowcount == 1
+
+
+def unmark_learned(user_id: int, entry_id: str) -> bool:
+    init_db()
+    with _connect() as conn:
+        cur = conn.execute(
+            "DELETE FROM dsa_learned WHERE user_id = ? AND entry_id = ?",
+            (user_id, entry_id),
+        )
+        return cur.rowcount > 0
+
+
+def toggle_learned(user_id: int, entry_id: str) -> bool:
+    """Flip the mark. Returns True when the entry is now learned."""
+    if is_learned(user_id, entry_id):
+        unmark_learned(user_id, entry_id)
+        return False
+    mark_learned(user_id, entry_id)
+    return True
+
+
+def is_learned(user_id: int, entry_id: str) -> bool:
+    init_db()
+    with _connect() as conn:
+        cur = conn.execute(
+            "SELECT 1 FROM dsa_learned WHERE user_id = ? AND entry_id = ? LIMIT 1",
+            (user_id, entry_id),
+        )
+        return cur.fetchone() is not None
+
+
+def learned_ids(user_id: int) -> set[str]:
+    init_db()
+    with _connect() as conn:
+        cur = conn.execute("SELECT entry_id FROM dsa_learned WHERE user_id = ?", (user_id,))
+        return {row[0] for row in cur.fetchall()}
+
+
+# ---- Daily stats snapshots + competition scoring. Additive only. ----
+# Snapshots are keyed by LOCAL date (BOT_TZ) and kept forever. Scores for a
+# window [start, now] come from snapshot deltas, so platforms with partial
+# solve history count fairly.
+
+
+def upsert_snapshot(user_id: int, platform: str, date: str, total_solved: int) -> None:
+    """Write the day's latest total (REPLACE keeps one row per day)."""
+    init_db()
+    with _connect() as conn:
+        conn.execute(
+            "INSERT OR REPLACE INTO stats_snapshots (user_id, platform, date, total_solved) VALUES (?, ?, ?, ?)",
+            (user_id, platform, date, total_solved),
+        )
+
+
+def get_snapshots(user_ids: list[int]) -> list[dict[str, Any]]:
+    """All snapshot rows for verified links of these users, in one query."""
+    if not user_ids:
+        return []
+    init_db()
+    with _connect() as conn:
+        conn.row_factory = sqlite3.Row
+        placeholders = ",".join("?" for _ in user_ids)
+        cur = conn.execute(
+            f"""
+            SELECT s.user_id, s.platform, s.date, s.total_solved
+            FROM stats_snapshots s
+            JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
+            WHERE s.user_id IN ({placeholders}) AND l.verified = 1
+            ORDER BY s.user_id, s.platform, s.date
+            """,
+            tuple(user_ids),
+        )
+        return [dict(row) for row in cur.fetchall()]
+
+
+def score_from_snapshots(rows: list[dict[str, Any]], start_date: str) -> dict[int, int]:
+    """Fold snapshot rows into {user_id: score}. Per platform: latest total
+    minus the total at the last snapshot strictly before start (else the
+    earliest snapshot); each contribution clamped at 0. Strictly-before keeps
+    same-day upserts from zeroing the window they open."""
+    by_pair: dict[tuple[int, str], list[tuple[str, int]]] = {}
+    for row in rows:
+        by_pair.setdefault((row["user_id"], row["platform"]), []).append((row["date"], row["total_solved"]))
+    scores: dict[int, int] = {}
+    for (uid, _), points in by_pair.items():
+        points.sort()
+        latest = points[-1][1]
+        base = points[0][1]
+        for day, total in points:
+            if day < start_date:
+                base = total
+        scores[uid] = scores.get(uid, 0) + max(0, latest - base)
+    return scores
+
+
+def window_scores(user_ids: list[int], start_date: str) -> dict[int, int]:
+    """{user_id: score} for windows starting at a local date string. One query + fold."""
+    rows = get_snapshots(user_ids)
+    scores = score_from_snapshots(rows, start_date)
+    for uid in user_ids:
+        scores.setdefault(uid, 0)
+    return scores
+
+
+def solve_difficulty_counts(user_ids: list[int], start_utc_iso: str) -> dict[int, dict[str, int]]:
+    """{user_id: {easy, medium, hard}} solves in window (verified only). One GROUP BY."""
+    out: dict[int, dict[str, int]] = {uid: {"easy": 0, "medium": 0, "hard": 0} for uid in user_ids}
+    if not user_ids:
+        return out
+    init_db()
+    with _connect() as conn:
+        placeholders = ",".join("?" for _ in user_ids)
+        cur = conn.execute(
+            f"""
+            SELECT s.user_id, s.difficulty, COUNT(*)
+            FROM solves s
+            JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
+            WHERE s.user_id IN ({placeholders}) AND l.verified = 1 AND s.solved_at >= ?
+            GROUP BY s.user_id, s.difficulty
+            """,
+            (*user_ids, start_utc_iso),
+        )
+        for uid, diff, count in cur.fetchall():
+            if diff in out[uid]:
+                out[uid][diff] = count
+    return out
+
+
+def user_rank_info(user_ids: list[int]) -> dict[int, tuple[int | None, str]]:
+    """{user_id: (best_rating, registered_at)} in one query for tie-breaks."""
+    if not user_ids:
+        return {}
+    init_db()
+    with _connect() as conn:
+        placeholders = ",".join("?" for _ in user_ids)
+        cur = conn.execute(
+            f"""
+            SELECT u.user_id, u.registered_at,
+                   (SELECT MAX(ps.rating) FROM platform_stats ps WHERE ps.user_id = u.user_id)
+            FROM users u WHERE u.user_id IN ({placeholders})
+            """,
+            tuple(user_ids),
+        )
+        return {row[0]: (row[2], row[1]) for row in cur.fetchall()}
+
+
+def daily_sums(user_id: int, start_date: str, days: int = 7) -> dict[str, int]:
+    """{UTC date: solves} for trailing local days, verified platforms only. One GROUP BY."""
+    init_db()
+    with _connect() as conn:
+        cur = conn.execute(
+            """
+            SELECT d.date, SUM(d.count)
+            FROM platform_daily d
+            JOIN linked_accounts l ON l.user_id = d.user_id AND l.platform = d.platform
+            WHERE d.user_id = ? AND l.verified = 1 AND d.date >= ?
+            GROUP BY d.date
+            """,
+            (user_id, start_date),
+        )
+        out = {row[0]: row[1] for row in cur.fetchall()}
+    return out
+
+
+def snapshot_platforms(user_id: int) -> list[str]:
+    """Verified platforms with at least one snapshot row (i.e. counted in totals)."""
+    init_db()
+    with _connect() as conn:
+        cur = conn.execute(
+            """
+            SELECT DISTINCT s.platform
+            FROM stats_snapshots s
+            JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
+            WHERE s.user_id = ? AND l.verified = 1
+            ORDER BY 1
+            """,
+            (user_id,),
+        )
+        return [row[0] for row in cur.fetchall()]

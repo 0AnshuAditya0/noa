@@ -43,21 +43,32 @@ class Help(commands.Cog):
         embed.add_field(
             name="Social",
             value=(
-                f"`{p}profile [@user]` — learning profile: path, stats, roadmap streak, "
-                f"coding platforms, totals and coding streak. Without a mention it shows yours.\n"
-                f"`{p}leaderboard` — server rankings: Problems solved (default) or Roadmap board, "
-                f"Prev/Next pages and All time / This week toggle."
+                f"`{p}profile [@user]` — tabbed profile: weekly solved/rank, totals, streaks, "
+                f"badges, activity chart, platforms, roadmap and DSA.\n"
+                f"`{p}leaderboard` — Problems board with This week / Last week / Month / Year / All time "
+                f"periods, or the Roadmap board. Paged, invoker-only.\n"
+                f"`{p}leaderboard podium` — last week's top 3."
             ),
             inline=False,
         )
         embed.add_field(
             name="Platforms",
             value=(
-                f"`{p}link <platform> <handle>` — link a coding account (codeforces). "
-                f"Paste the token into your profile, then press Verify.\n"
+                f"`{p}link <platform> <handle>` — link a coding account (codeforces, leetcode, atcoder). "
+                f"Paste the token into your profile field, then press Verify.\n"
                 f"`{p}unlink <platform>` — unlink and clear its cached data.\n"
-                f"`{p}accounts` — list your linked accounts and status.\n"
+                f"`{p}accounts` — list your linked accounts, status and sync health.\n"
                 f"`{p}sync` — refresh platform stats (10 min cooldown)."
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="DSA Library",
+            value=(
+                f"`{p}dsa` — interactive reference hub: pick a category, then an entry. "
+                f"Tabs for overview, how-it-works, pitfalls and related.\n"
+                f"`{p}dsa search <term>` — search titles, summaries and tags.\n"
+                f"`{p}tip` — random pitfall or tip from the library."
             ),
             inline=False,
         )

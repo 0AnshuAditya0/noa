@@ -15,24 +15,72 @@ LOOP_DELAY = 3
 
 
 async def sync_one(adapter, user_id: int, platform: str, handle: str, since: str | None = None) -> dict:
-    """Fetch profile + solves, store them, rebuild stats. Raises PlatformError on API failure."""
+    """Fetch profile + activity, store them, refresh stats. Raises PlatformError on API failure.
+
+    Native-daily adapters (LeetCode) serve the calendar, so solves stay a
+    best-effort window. Other adapters (Codeforces) fetch the full history and
+    derive daily counts from it — no extra API calls.
+    """
+    from platforms.base import count_by_date
+
     profile = await adapter.fetch_profile(handle)
     if not profile.get("exists"):
         raise PlatformError(f"Handle '{handle}' not found on {platform}.")
-    solves = await adapter.fetch_solves(handle, since)
+    if getattr(adapter, "NATIVE_DAILY", False):
+        solves = await adapter.fetch_solves(handle, since)
+        daily = await adapter.fetch_daily_counts(handle)
+    else:
+        solves = await adapter.fetch_solves(handle, None)
+        daily = count_by_date(solves)
     new = db.upsert_solves(user_id, platform, solves)
-    stats = db.rebuild_platform_stats(user_id, platform, profile.get("rating"), profile.get("max_rating"))
+    if daily:
+        db.upsert_daily(user_id, platform, daily)
+    if getattr(adapter, "AUTHORITATIVE_PROFILE_STATS", False):
+        stats = db.write_platform_stats(
+            user_id, platform,
+            total=profile.get("total_solved", 0) or 0,
+            easy=profile.get("easy", 0) or 0,
+            medium=profile.get("medium", 0) or 0,
+            hard=profile.get("hard", 0) or 0,
+            rating=profile.get("rating"),
+            max_rating=profile.get("max_rating"),
+        )
+    else:
+        stats = db.rebuild_platform_stats(user_id, platform, profile.get("rating"), profile.get("max_rating"))
     stats["new_solves"] = new
+    import tzutil
+
+    db.upsert_snapshot(user_id, platform, tzutil.today_str(), stats["total_solved"])
     return stats
 
 
+def _ago(iso: str | None) -> str:
+    from datetime import datetime, timezone
+
+    if not iso:
+        return "never"
+    try:
+        then = datetime.fromisoformat(iso)
+    except ValueError:
+        return "unknown"
+    if then.tzinfo is None:
+        then = then.replace(tzinfo=timezone.utc)
+    secs = (datetime.now(timezone.utc) - then).total_seconds()
+    if secs < 3600:
+        return f"{max(int(secs // 60), 1)}m ago"
+    if secs < 86400:
+        return f"{int(secs // 3600)}h ago"
+    return f"{int(secs // 86400)}d ago"
+
+
 class VerifyView(discord.ui.View):
-    def __init__(self, owner_id: int, platform: str, handle: str, token: str) -> None:
+    def __init__(self, owner_id: int, platform: str, handle: str, token: str, prefix: str = ">") -> None:
         super().__init__(timeout=VERIFY_TIMEOUT)
         self.owner_id = owner_id
         self.platform = platform
         self.handle = handle
         self.token = token
+        self.prefix = prefix
         self.message: discord.Message | None = None
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
@@ -69,10 +117,11 @@ class VerifyView(discord.ui.View):
             self.message = interaction.message
             return
         if self.token not in field_text:
+            field = getattr(ADAPTERS.get(self.platform), "verification_field_label", "profile")
             embed = discord.Embed(
                 title="Token not found yet",
                 description=(
-                    f"Put `{self.token}` in your Codeforces **organization** field and save, "
+                    f"Put `{self.token}` in your {self.platform} **{field}** field and save, "
                     f"then press Verify again."
                 ),
                 color=discord.Color.orange(),
@@ -90,8 +139,10 @@ class VerifyView(discord.ui.View):
         try:
             stats = await sync_one(adapter, self.owner_id, self.platform, self.handle)
         except PlatformError as exc:
+            db.mark_sync_failed(self.owner_id, self.platform, f"{type(exc).__name__}: {exc}")
             await interaction.edit_original_response(
-                content=f"Verified, but the first sync failed: {exc}. Use `>sync` later.", embed=None, view=None
+                content=f"Verified, but the first sync failed: {exc}. Use `{self.prefix}sync` later.",
+                embed=None, view=None,
             )
             return
         embed = discord.Embed(title=f"{self.platform} linked: {self.handle}", color=discord.Color.green())
@@ -145,12 +196,13 @@ class Platforms(commands.Cog):
             return
         token = f"noa-{secrets.token_hex(3)}"
         db.create_pending_link(ctx.author.id, platform, handle, token)
+        field = getattr(adapter, "verification_field_label", "profile")
         embed = discord.Embed(title=f"Link {platform}: {handle}", color=discord.Color.blurple())
         embed.description = (
-            f"Paste this token into your Codeforces **organization** field "
+            f"Paste this token into your {platform} **{field}** field "
             f"(profile settings) and save:\n`{token}`\n\nThen press Verify."
         )
-        view = VerifyView(ctx.author.id, platform, handle, token)
+        view = VerifyView(ctx.author.id, platform, handle, token, ctx.prefix)
         msg = await ctx.send(embed=embed, view=view)
         view.message = msg
 
@@ -179,8 +231,11 @@ class Platforms(commands.Cog):
                 value = (
                     f"{status} · rating {stats['rating'] or 'unrated'} · "
                     f"{stats['total_solved']} solved "
-                    f"(e{stats['easy']}/m{stats['medium']}/h{stats['hard']})"
+                    f"(e{stats['easy']}/m{stats['medium']}/h{stats['hard']}) · "
+                    f"last synced {_ago(stats.get('last_synced'))}"
                 )
+                if not stats.get("sync_ok", 1):
+                    value += " (sync failing)"
             else:
                 value = f"{status} · `{handle}`"
             embed.add_field(name=f"{platform}: {handle}", value=value, inline=False)
@@ -197,7 +252,7 @@ class Platforms(commands.Cog):
             return
         links = [lnk for lnk in db.list_links(ctx.author.id) if lnk["verified"]]
         if not links:
-            await ctx.send(f"No verified accounts. Use `{ctx.prefix}link codeforces <handle>` first.")
+            await ctx.send(f"No verified accounts. Link one first: `{ctx.prefix}link <platform> <handle>` ({', '.join(sorted(ADAPTERS))}).")
             return
         self._sync_cooldown[ctx.author.id] = now
         status_msg = await ctx.send("Syncing…")
@@ -217,6 +272,7 @@ class Platforms(commands.Cog):
                     f"(+{result['new_solves']} new), rating {result['rating'] or 'unrated'}"
                 )
             except PlatformError as exc:
+                db.mark_sync_failed(ctx.author.id, link["platform"], f"{type(exc).__name__}: {exc}")
                 lines.append(f"**{link['platform']}: {link['handle']}** — sync failed ({exc}); kept last good data.")
         embed = discord.Embed(title="Sync complete", description="\n".join(lines), color=discord.Color.green())
         await status_msg.edit(content=None, embed=embed)
@@ -235,7 +291,8 @@ class Platforms(commands.Cog):
                     since=stats["last_synced"] if stats and stats.get("last_synced") else None,
                 )
             except Exception as exc:  # noqa: BLE001 - one bad account must not stop the loop
-                print(f"[platforms] background sync failed for {row['platform']}:{row['handle']}: {exc}")
+                db.mark_sync_failed(row["user_id"], row["platform"], f"{type(exc).__name__}: {exc}")
+                print(f"[platforms] {type(exc).__name__} syncing {row['platform']}:{row['handle']} (user {row['user_id']}): {exc}")
             await asyncio.sleep(LOOP_DELAY)
 
     @platform_sync_loop.before_loop
