@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import secrets
 import time
 
@@ -8,6 +9,8 @@ from discord.ext import commands, tasks
 import db
 from platforms import ADAPTERS
 from platforms.base import PlatformError
+
+logger = logging.getLogger(__name__)
 
 VERIFY_TIMEOUT = 300
 SYNC_COOLDOWN = 10 * 60
@@ -167,6 +170,7 @@ class Platforms(commands.Cog):
         self.platform_sync_loop.cancel()
 
     @commands.command(name="link")
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def link(self, ctx: commands.Context, platform: str, handle: str) -> None:
         """Link a coding-platform handle. Usage: >link codeforces <handle>."""
         platform = platform.strip().lower()
@@ -292,7 +296,10 @@ class Platforms(commands.Cog):
                 )
             except Exception as exc:  # noqa: BLE001 - one bad account must not stop the loop
                 db.mark_sync_failed(row["user_id"], row["platform"], f"{type(exc).__name__}: {exc}")
-                print(f"[platforms] {type(exc).__name__} syncing {row['platform']}:{row['handle']} (user {row['user_id']}): {exc}")
+                logger.warning(
+                    "Background sync failed: platform=%s user_id=%s error=%s: %s",
+                    row["platform"], row["user_id"], type(exc).__name__, exc,
+                )
             await asyncio.sleep(LOOP_DELAY)
 
     @platform_sync_loop.before_loop

@@ -73,6 +73,14 @@ class Help(commands.Cog):
             inline=False,
         )
         embed.add_field(
+            name="Privacy",
+            value=(
+                f"`{p}privacy` — plain-words explanation of what Noa stores.\n"
+                f"`{p}deleteme` — erase all your data, after confirmation."
+            ),
+            inline=False,
+        )
+        embed.add_field(
             name="General",
             value=f"`{p}ping` — check the bot is alive. Replies with pong.",
             inline=False,

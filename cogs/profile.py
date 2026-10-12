@@ -154,6 +154,7 @@ class Profile(commands.Cog):
         db.init_db()
 
     @commands.command(name="profile")
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def profile(self, ctx: commands.Context, member: discord.Member | None = None) -> None:
         """Tabbed learning profile: Overview / Platforms / Roadmap / DSA."""
         target = member or ctx.author
@@ -168,6 +169,7 @@ class Profile(commands.Cog):
         view.message = msg
 
     @commands.group(name="leaderboard", invoke_without_command=True)
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def leaderboard(self, ctx: commands.Context) -> None:
         """Server leaderboard: Problems solved (default) or Roadmap. 10 per page."""
         if ctx.guild is None:

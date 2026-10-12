@@ -406,6 +406,7 @@ class Dsa(commands.Cog):
         view.message = msg
 
     @dsa.command(name="search")
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def dsa_search(self, ctx: commands.Context, *, term: str) -> None:
         """Search entries by title, summary and tags. Usage: >dsa search <term>."""
         results = dsa.search_entries(term)

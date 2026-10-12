@@ -1,19 +1,84 @@
 """SQLite store. Per-user isolation: every query filters by user_id."""
 from __future__ import annotations
 
+import os
 import sqlite3
+import tempfile
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
-DB_PATH = Path(__file__).parent / "data" / "noa.db"
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DEFAULT_DB_PATH = Path(__file__).parent / "data" / "noa.db"
 
 
-def _connect() -> sqlite3.Connection:
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA journal_mode=WAL;")
-    return conn
+def get_db_path() -> Path:
+    """Database file: NOA_DB_PATH or the default. Read live so test mode can swap it."""
+    override = os.getenv("NOA_DB_PATH")
+    return Path(override).expanduser() if override else DEFAULT_DB_PATH
+
+
+# Kept for backwards compatibility; new code should call get_db_path().
+DB_PATH = get_db_path()
+
+_TEST_ENV_VAR = "NOA_TESTING"
+
+
+def is_test_mode() -> bool:
+    return os.getenv(_TEST_ENV_VAR, "").strip().lower() in ("1", "true", "yes")
+
+
+@contextmanager
+def temp_db() -> Iterator[Path]:
+    """Point all db access at a throwaway database. Test scripts must use this
+    (or set NOA_DB_PATH) so they can never touch the real database."""
+    with tempfile.TemporaryDirectory(prefix="noa-test-") as tmpdir:
+        old_path, old_flag = os.getenv("NOA_DB_PATH"), os.getenv(_TEST_ENV_VAR)
+        test_file = str(Path(tmpdir) / "test.db")
+        os.environ["NOA_DB_PATH"] = test_file
+        os.environ[_TEST_ENV_VAR] = "1"
+        try:
+            init_db()
+            yield Path(test_file)
+        finally:
+            if old_path is None:
+                os.environ.pop("NOA_DB_PATH", None)
+            else:
+                os.environ["NOA_DB_PATH"] = old_path
+            if old_flag is None:
+                os.environ.pop(_TEST_ENV_VAR, None)
+            else:
+                os.environ[_TEST_ENV_VAR] = old_flag
+
+
+def _connect() -> "_ManagedConnection":
+    return _ManagedConnection(get_db_path())
+
+
+class _ManagedConnection:
+    """Context manager yielding a SQLite connection. Commits (or rolls back)
+    on exit AND closes the handle, so no file locks leak on Windows."""
+
+    def __init__(self, path: Path) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        self._conn = sqlite3.connect(path)
+        self._conn.execute("PRAGMA journal_mode=WAL;")
+
+    def __enter__(self) -> sqlite3.Connection:
+        return self._conn
+
+    def __exit__(self, exc_type, exc, tb) -> None:
+        try:
+            if exc_type is None:
+                self._conn.commit()
+            else:
+                self._conn.rollback()
+        finally:
+            self._conn.close()
 
 
 def init_db() -> None:
@@ -791,6 +856,56 @@ def learned_ids(user_id: int) -> set[str]:
     with _connect() as conn:
         cur = conn.execute("SELECT entry_id FROM dsa_learned WHERE user_id = ?", (user_id,))
         return {row[0] for row in cur.fetchall()}
+
+
+# ---- Privacy + admin. Additive only. ----
+
+USER_TABLES = (
+    "users",
+    "progress",
+    "user_activity",
+    "linked_accounts",
+    "solves",
+    "platform_stats",
+    "platform_daily",
+    "stats_snapshots",
+    "dsa_learned",
+)
+
+
+def delete_user_data(user_id: int) -> dict[str, int]:
+    """Delete every row belonging to a user, all tables, one transaction."""
+    init_db()
+    counts: dict[str, int] = {}
+    with _connect() as conn:
+        for table in USER_TABLES:
+            cur = conn.execute(f"DELETE FROM {table} WHERE user_id = ?", (user_id,))
+            counts[table] = cur.rowcount
+    return counts
+
+
+def admin_stats() -> dict[str, Any]:
+    """Instance overview for the owner: users, links, sync health. Aggregates only."""
+    init_db()
+    with _connect() as conn:
+        users = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+        links = conn.execute(
+            "SELECT platform, verified, COUNT(*) FROM linked_accounts GROUP BY platform, verified"
+        ).fetchall()
+        latest = conn.execute(
+            "SELECT platform, MAX(last_synced) FROM platform_stats GROUP BY platform"
+        ).fetchall()
+        failing = conn.execute(
+            "SELECT user_id, platform, last_synced, last_error FROM platform_stats WHERE sync_ok = 0"
+        ).fetchall()
+    return {
+        "users": users,
+        "links": [{"platform": p, "verified": bool(v), "count": c} for p, v, c in links],
+        "latest_sync": {p: ts for p, ts in latest},
+        "failing": [
+            {"user_id": u, "platform": p, "last_synced": ts, "last_error": e} for u, p, ts, e in failing
+        ],
+    }
 
 
 # ---- Daily stats snapshots + competition scoring. Additive only. ----
