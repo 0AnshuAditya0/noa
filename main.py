@@ -6,8 +6,11 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
+import db
+
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
+BOT_PREFIX = os.getenv("BOT_PREFIX", ">")
 
 if not TOKEN:
     raise RuntimeError("TOKEN not found in .env. Add TOKEN=your_bot_token to .env")
@@ -28,11 +31,45 @@ class NoaBot(commands.Bot):
 def make_bot() -> NoaBot:
     intents = discord.Intents.default()
     intents.message_content = True  # required for prefix commands to read content
-    bot = NoaBot(command_prefix="!", intents=intents)
+    bot = NoaBot(command_prefix=BOT_PREFIX, intents=intents, help_command=None)
     return bot
 
 
 bot = make_bot()
+
+
+@bot.check
+async def registration_gate(ctx: commands.Context) -> bool:
+    """Unregistered users may only use 'register' and 'help'."""
+    if ctx.author.bot:
+        return False
+    if ctx.command is None:  # unknown command; let on_command_error ignore it
+        return True
+    if ctx.command.name in ("register", "help"):
+        return True
+    try:
+        if db.is_registered(ctx.author.id):
+            return True
+    except Exception:
+        return True  # fail open so a DB hiccup can't lock everyone out
+    embed = discord.Embed(
+        title="Account required",
+        description=f"You need an account first. Run `{ctx.prefix}register`.",
+        color=discord.Color.orange(),
+    )
+    try:
+        await ctx.send(embed=embed)
+    except discord.HTTPException:
+        pass
+    return False
+
+
+@bot.event
+async def on_command_error(ctx: commands.Context, error: commands.CommandError) -> None:
+    # Silently ignore unknown commands and gate blocks (already messaged).
+    if isinstance(error, (commands.CommandNotFound, commands.CheckFailure)):
+        return
+    raise error
 
 
 @bot.event

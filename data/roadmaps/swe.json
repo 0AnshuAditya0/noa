@@ -1,0 +1,707 @@
+{
+  "id": "swe",
+  "name": "swe",
+  "title": "Software Engineering",
+  "description": "End-to-end software engineering path: fundamentals, DSA, OS, networking, databases, backend, system design, testing and interview prep.",
+  "id_policy": "IDs are permanent, never renumber. New topics get new IDs.",
+  "topics": [
+    {
+      "id": "01",
+      "title": "Programming Fundamentals",
+      "subtopics": [
+        {
+          "id": "01.1",
+          "title": "Syntax, variables and control flow (Python-first)",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "freeCodeCamp Scientific Computing with Python", "url": "https://www.freecodecamp.org/learn/scientific-computing-with-python/" }
+          ]
+        },
+        {
+          "id": "01.2",
+          "title": "Functions, scope and modules",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" }
+          ]
+        },
+        {
+          "id": "01.3",
+          "title": "Basic data structures: lists, dicts, sets, strings",
+          "resources": [
+            { "name": "Python Official Tutorial - Data Structures", "url": "https://docs.python.org/3/tutorial/datastructures.html" },
+            { "name": "CS50x", "url": "https://cs50.harvard.edu/x/" }
+          ]
+        },
+        {
+          "id": "01.4",
+          "title": "Debugging, errors and reading traceback",
+          "resources": [
+            { "name": "CS50x", "url": "https://cs50.harvard.edu/x/" },
+            { "name": "MDN JavaScript first steps (debugging mindset)", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" }
+          ]
+        },
+        {
+          "id": "01.5",
+          "title": "Complexity basics: Big-O intuition",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "MIT 6.006 Introduction to Algorithms", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "Git and GitHub",
+      "subtopics": [
+        {
+          "id": "02.1",
+          "title": "Git basics: init, add, commit, status, log",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "freeCodeCamp Git and GitHub for Beginners", "url": "https://www.freecodecamp.org/news/git-and-github-for-beginners/" }
+          ]
+        },
+        {
+          "id": "02.2",
+          "title": "Branching, merging and merge conflicts",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "02.3",
+          "title": "Remotes, push, pull, fetch and pull requests",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        },
+        {
+          "id": "02.4",
+          "title": "Undoing changes: reset, revert, stash, .gitignore",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "02.5",
+          "title": "Collaboration: forks, code review, issues",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "OOP and Design Patterns",
+      "subtopics": [
+        {
+          "id": "03.1",
+          "title": "Classes, objects, constructors",
+          "resources": [
+            { "name": "Python Tutorial - Classes", "url": "https://docs.python.org/3/tutorial/classes.html" },
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" }
+          ]
+        },
+        {
+          "id": "03.2",
+          "title": "Encapsulation, inheritance, polymorphism",
+          "resources": [
+            { "name": "Python Tutorial - Classes", "url": "https://docs.python.org/3/tutorial/classes.html" },
+            { "name": "freeCodeCamp Scientific Computing with Python", "url": "https://www.freecodecamp.org/learn/scientific-computing-with-python/" }
+          ]
+        },
+        {
+          "id": "03.3",
+          "title": "SOLID principles",
+          "resources": [
+            { "name": "Refactoring.Guru Design Patterns", "url": "https://refactoring.guru/design-patterns" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "03.4",
+          "title": "Common patterns: Singleton, Factory, Observer, Strategy",
+          "resources": [
+            { "name": "Refactoring.Guru Design Patterns", "url": "https://refactoring.guru/design-patterns" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "03.5",
+          "title": "Composition over inheritance, interfaces in practice",
+          "resources": [
+            { "name": "Refactoring.Guru Design Patterns", "url": "https://refactoring.guru/design-patterns" },
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "DSA: Arrays, Strings and Hashing",
+      "subtopics": [
+        {
+          "id": "04.1",
+          "title": "Arrays, two pointers, sliding window",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "04.2",
+          "title": "Strings: manipulation, anagrams, encoding",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "04.3",
+          "title": "Hash maps and hash sets",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "MIT 6.006 Introduction to Algorithms", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" }
+          ]
+        },
+        {
+          "id": "04.4",
+          "title": "Stacks, queues and monotonic stack",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "04.5",
+          "title": "Heaps and priority queues",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "MIT 6.006 Introduction to Algorithms", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "DSA: Recursion, Searching and Sorting",
+      "subtopics": [
+        {
+          "id": "05.1",
+          "title": "Recursion and backtracking basics",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "CS50x", "url": "https://cs50.harvard.edu/x/" }
+          ]
+        },
+        {
+          "id": "05.2",
+          "title": "Binary search and search spaces",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "05.3",
+          "title": "Merge sort, quicksort, heap sort",
+          "resources": [
+            { "name": "MIT 6.006 Introduction to Algorithms", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" },
+            { "name": "MIT 6.046J Design and Analysis of Algorithms", "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/" }
+          ]
+        },
+        {
+          "id": "05.4",
+          "title": "Divide and conquer patterns",
+          "resources": [
+            { "name": "MIT 6.006 Introduction to Algorithms", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "05.5",
+          "title": "Backtracking: subsets, permutations, N-queens",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "DSA: Trees and Graphs",
+      "subtopics": [
+        {
+          "id": "06.1",
+          "title": "Binary trees: traversals (inorder, preorder, postorder)",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "06.2",
+          "title": "Binary search trees and balanced trees",
+          "resources": [
+            { "name": "MIT 6.006 Introduction to Algorithms", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "06.3",
+          "title": "Tries",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "06.4",
+          "title": "Graph representations, BFS and DFS",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "MIT 6.006 Introduction to Algorithms", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" }
+          ]
+        },
+        {
+          "id": "06.5",
+          "title": "Topological sort, union-find, cycle detection",
+          "resources": [
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" },
+            { "name": "MIT 6.046J Design and Analysis of Algorithms", "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/" }
+          ]
+        },
+        {
+          "id": "06.6",
+          "title": "Shortest paths: Dijkstra, Bellman-Ford, Floyd-Warshall",
+          "resources": [
+            { "name": "MIT 6.006 Introduction to Algorithms", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "DSA: Dynamic Programming",
+      "subtopics": [
+        {
+          "id": "07.1",
+          "title": "Memoization vs tabulation, 1D DP",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "07.2",
+          "title": "2D DP: grid paths, knapsack",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "MIT 6.046J Design and Analysis of Algorithms", "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/" }
+          ]
+        },
+        {
+          "id": "07.3",
+          "title": "Subsequence DP: LIS, LCS, edit distance",
+          "resources": [
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" },
+            { "name": "MIT 6.006 Introduction to Algorithms", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/" }
+          ]
+        },
+        {
+          "id": "07.4",
+          "title": "Interval and partition DP",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "07.5",
+          "title": "DP on trees and graphs (DAG)",
+          "resources": [
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" },
+            { "name": "MIT 6.046J Design and Analysis of Algorithms", "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "Operating Systems",
+      "subtopics": [
+        {
+          "id": "08.1",
+          "title": "Processes, threads and concurrency",
+          "resources": [
+            { "name": "OSTEP Free Book", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "name": "MIT 6.S081 Operating System Engineering", "url": "https://ocw.mit.edu/courses/6-081-operating-system-engineering-fall-2021/" }
+          ]
+        },
+        {
+          "id": "08.2",
+          "title": "CPU scheduling and synchronization (locks, semaphores)",
+          "resources": [
+            { "name": "OSTEP Free Book", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "name": "MIT 6.S081 Operating System Engineering", "url": "https://ocw.mit.edu/courses/6-081-operating-system-engineering-fall-2021/" }
+          ]
+        },
+        {
+          "id": "08.3",
+          "title": "Memory management: virtual memory, paging",
+          "resources": [
+            { "name": "OSTEP Free Book", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "08.4",
+          "title": "File systems and storage",
+          "resources": [
+            { "name": "OSTEP Free Book", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "name": "MIT 6.S081 Operating System Engineering", "url": "https://ocw.mit.edu/courses/6-081-operating-system-engineering-fall-2021/" }
+          ]
+        },
+        {
+          "id": "08.5",
+          "title": "Linux CLI, permissions, processes and systemd",
+          "resources": [
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "Networking",
+      "subtopics": [
+        {
+          "id": "09.1",
+          "title": "OSI and TCP/IP models, IP, subnets, DNS",
+          "resources": [
+            { "name": "freeCodeCamp Computer Networking Course", "url": "https://www.freecodecamp.org/news/computer-networking-course/" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "09.2",
+          "title": "TCP vs UDP, ports, three-way handshake",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "freeCodeCamp Computer Networking Course", "url": "https://www.freecodecamp.org/news/computer-networking-course/" }
+          ]
+        },
+        {
+          "id": "09.3",
+          "title": "HTTP, HTTPS, REST, status codes, cookies",
+          "resources": [
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "09.4",
+          "title": "TLS, certificates and basic security",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        },
+        {
+          "id": "09.5",
+          "title": "WebSockets, polling, SSE basics",
+          "resources": [
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "DBMS and SQL",
+      "subtopics": [
+        {
+          "id": "10.1",
+          "title": "Relational model, keys, normalization",
+          "resources": [
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" },
+            { "name": "freeCodeCamp Relational Database", "url": "https://www.freecodecamp.org/learn/relational-database/" }
+          ]
+        },
+        {
+          "id": "10.2",
+          "title": "Core SQL: SELECT, WHERE, JOIN, GROUP BY",
+          "resources": [
+            { "name": "SQLBolt", "url": "https://sqlbolt.com/" },
+            { "name": "freeCodeCamp Relational Database", "url": "https://www.freecodecamp.org/learn/relational-database/" }
+          ]
+        },
+        {
+          "id": "10.3",
+          "title": "Indexes, transactions, isolation levels",
+          "resources": [
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" },
+            { "name": "SQLite Docs", "url": "https://www.sqlite.org/docs.html" }
+          ]
+        },
+        {
+          "id": "10.4",
+          "title": "NoSQL overview: documents, key-value, Redis basics",
+          "resources": [
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "10.5",
+          "title": "ORMs and migrations in practice",
+          "resources": [
+            { "name": "Django Docs", "url": "https://docs.djangoproject.com/en/stable/" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Backend Basics",
+      "subtopics": [
+        {
+          "id": "11.1",
+          "title": "How the web works: client, server, API",
+          "resources": [
+            { "name": "MDN Express / Node Intro", "url": "https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "11.2",
+          "title": "REST APIs: routes, verbs, validation, errors",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        },
+        {
+          "id": "11.3",
+          "title": "Auth: sessions, JWT, OAuth2 basics",
+          "resources": [
+            { "name": "FastAPI Docs - Security", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        },
+        {
+          "id": "11.4",
+          "title": "Python backend: FastAPI or Django",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "Django Docs", "url": "https://docs.djangoproject.com/en/stable/" }
+          ]
+        },
+        {
+          "id": "11.5",
+          "title": "Caching and background jobs basics",
+          "resources": [
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" },
+            { "name": "Django Docs", "url": "https://docs.djangoproject.com/en/stable/" }
+          ]
+        },
+        {
+          "id": "11.6",
+          "title": "Env config, logging and 12-factor basics",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "System Design Basics",
+      "subtopics": [
+        {
+          "id": "12.1",
+          "title": "Scalability: horizontal vs vertical, load balancers",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        },
+        {
+          "id": "12.2",
+          "title": "Caching, CDNs and message queues",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "12.3",
+          "title": "Database scaling: replication, sharding, CAP",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        },
+        {
+          "id": "12.4",
+          "title": "Design TinyURL / rate limiter",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        },
+        {
+          "id": "12.5",
+          "title": "Design Instagram feed / chat system",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Testing and CI/CD",
+      "subtopics": [
+        {
+          "id": "13.1",
+          "title": "Unit testing with pytest",
+          "resources": [
+            { "name": "Pytest Docs", "url": "https://docs.pytest.org/en/stable/" },
+            { "name": "freeCodeCamp Quality Assurance", "url": "https://www.freecodecamp.org/learn/quality-assurance/" }
+          ]
+        },
+        {
+          "id": "13.2",
+          "title": "Integration and API testing",
+          "resources": [
+            { "name": "FastAPI Docs - Testing", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "freeCodeCamp Quality Assurance", "url": "https://www.freecodecamp.org/learn/quality-assurance/" }
+          ]
+        },
+        {
+          "id": "13.3",
+          "title": "GitHub Actions: lint, test on push",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        },
+        {
+          "id": "13.4",
+          "title": "Docker basics: build, run, compose",
+          "resources": [
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "13.5",
+          "title": "Deploy a small app (Render / Fly / VPS)",
+          "resources": [
+            { "name": "FastAPI Docs - Deployment", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "title": "Projects",
+      "subtopics": [
+        {
+          "id": "14.1",
+          "title": "CLI + file project (notes, expense tracker)",
+          "resources": [
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" },
+            { "name": "freeCodeCamp Scientific Computing with Python", "url": "https://www.freecodecamp.org/learn/scientific-computing-with-python/" }
+          ]
+        },
+        {
+          "id": "14.2",
+          "title": "REST API project with DB + auth",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "14.3",
+          "title": "Full-stack project with tests + CI",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "14.4",
+          "title": "Polish: README, demo, hosted link",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15",
+      "title": "Interview Prep",
+      "subtopics": [
+        {
+          "id": "15.1",
+          "title": "NeetCode 75 / Blind 75 plan",
+          "resources": [
+            { "name": "NeetCode Roadmap", "url": "https://neetcode.io/roadmap" },
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" }
+          ]
+        },
+        {
+          "id": "15.2",
+          "title": "Behavioral: STAR stories, resume walkthrough",
+          "resources": [
+            { "name": "CS50x", "url": "https://cs50.harvard.edu/x/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "15.3",
+          "title": "Mock interviews and time management",
+          "resources": [
+            { "name": "NeetCode Practice", "url": "https://neetcode.io/practice" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        },
+        {
+          "id": "15.4",
+          "title": "CS fundamentals rapid review (OS, DB, networking)",
+          "resources": [
+            { "name": "OSTEP Free Book", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        },
+        {
+          "id": "15.5",
+          "title": "System design interview framework",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        }
+      ]
+    }
+  ]
+}
