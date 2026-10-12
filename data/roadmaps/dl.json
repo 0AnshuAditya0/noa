@@ -1,0 +1,597 @@
+{
+  "id": "dl",
+  "name": "dl",
+  "title": "Deep Learning",
+  "description": "Beginner-first deep learning path: Python and math prerequisites, how neural nets learn, PyTorch, CNNs, sequences, transformers, generative models, scaling, deployment and capstone projects.",
+  "id_policy": "IDs are permanent, never renumber. New topics get new IDs.",
+  "topics": [
+    {
+      "id": "01",
+      "title": "Python and NumPy Refresher",
+      "subtopics": [
+        {
+          "id": "01.1",
+          "title": "Python refresher: functions, lists, dicts",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" }
+          ]
+        },
+        {
+          "id": "01.2",
+          "title": "Jupyter notebooks and Colab GPUs",
+          "resources": [
+            { "name": "Jupyter", "url": "https://jupyter.org/" },
+            { "name": "Google Colab", "url": "https://colab.research.google.com/" }
+          ]
+        },
+        {
+          "id": "01.3",
+          "title": "NumPy arrays, reshaping and broadcasting",
+          "resources": [
+            { "name": "NumPy Docs", "url": "https://numpy.org/doc/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "01.4",
+          "title": "Git for DL work: repos and checkpoints",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "01.5",
+          "title": "Plotting training curves with Matplotlib",
+          "resources": [
+            { "name": "Matplotlib", "url": "https://matplotlib.org/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "Linear Algebra for DL",
+      "subtopics": [
+        {
+          "id": "02.1",
+          "title": "Vectors, matrices and dot products",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "02.2",
+          "title": "Matrix multiplication and transpose",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "MIT 18.06 Linear Algebra", "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/" }
+          ]
+        },
+        {
+          "id": "02.3",
+          "title": "Eigendecomposition and SVD intuition",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        },
+        {
+          "id": "02.4",
+          "title": "Tensors: scalars, vectors, matrices and beyond",
+          "resources": [
+            { "name": "NumPy Docs", "url": "https://numpy.org/doc/" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "Calculus, Probability and Optimization Basics",
+      "subtopics": [
+        {
+          "id": "03.1",
+          "title": "Derivatives and partial derivatives",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "03.2",
+          "title": "Chain rule and gradients",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "03.3",
+          "title": "Probability: Bayes and expectations",
+          "resources": [
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" },
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" }
+          ]
+        },
+        {
+          "id": "03.4",
+          "title": "Loss landscapes and minima intuition",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Dive into Deep Learning", "url": "https://d2l.ai/" }
+          ]
+        },
+        {
+          "id": "03.5",
+          "title": "Statistics essentials: variance and bias",
+          "resources": [
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "How Neural Nets Learn",
+      "subtopics": [
+        {
+          "id": "04.1",
+          "title": "Perceptrons and multilayer networks",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "04.2",
+          "title": "Activation functions: ReLU, sigmoid, softmax",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Dive into Deep Learning", "url": "https://d2l.ai/" }
+          ]
+        },
+        {
+          "id": "04.3",
+          "title": "Gradient descent from scratch",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "04.4",
+          "title": "Backpropagation step by step",
+          "resources": [
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" },
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" }
+          ]
+        },
+        {
+          "id": "04.5",
+          "title": "Overfitting in neural nets",
+          "resources": [
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" },
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "PyTorch Fundamentals",
+      "subtopics": [
+        {
+          "id": "05.1",
+          "title": "Tensors, dtypes and GPU moves",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "PyTorch", "url": "https://pytorch.org/" }
+          ]
+        },
+        {
+          "id": "05.2",
+          "title": "Autograd and computation graphs",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "Dive into Deep Learning", "url": "https://d2l.ai/" }
+          ]
+        },
+        {
+          "id": "05.3",
+          "title": "Datasets and DataLoaders",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "05.4",
+          "title": "Writing a training loop",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" }
+          ]
+        },
+        {
+          "id": "05.5",
+          "title": "Saving and loading models",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "PyTorch", "url": "https://pytorch.org/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "Training Well",
+      "subtopics": [
+        {
+          "id": "06.1",
+          "title": "Loss functions for classification and regression",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" }
+          ]
+        },
+        {
+          "id": "06.2",
+          "title": "Optimizers: SGD, momentum and Adam",
+          "resources": [
+            { "name": "Dive into Deep Learning", "url": "https://d2l.ai/" },
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" }
+          ]
+        },
+        {
+          "id": "06.3",
+          "title": "Learning-rate schedules and warmup",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        },
+        {
+          "id": "06.4",
+          "title": "Regularization, dropout and normalization layers",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "06.5",
+          "title": "Debugging training: NaNs and the LR finder",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "Dive into Deep Learning", "url": "https://d2l.ai/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "CNNs for Vision",
+      "subtopics": [
+        {
+          "id": "07.1",
+          "title": "Convolutions, filters and pooling",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" }
+          ]
+        },
+        {
+          "id": "07.2",
+          "title": "Modern CNNs: ResNets and friends",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "arXiv", "url": "https://arxiv.org/" }
+          ]
+        },
+        {
+          "id": "07.3",
+          "title": "Transfer learning with pretrained nets",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        },
+        {
+          "id": "07.4",
+          "title": "Object detection overview",
+          "resources": [
+            { "name": "COCO Dataset", "url": "https://cocodataset.org/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "07.5",
+          "title": "Segmentation overview",
+          "resources": [
+            { "name": "COCO Dataset", "url": "https://cocodataset.org/" },
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "Sequence Models",
+      "subtopics": [
+        {
+          "id": "08.1",
+          "title": "RNNs and backprop through time",
+          "resources": [
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        },
+        {
+          "id": "08.2",
+          "title": "LSTMs and GRUs",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "08.3",
+          "title": "Embeddings for sequences",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "08.4",
+          "title": "Time-series forecasting project",
+          "resources": [
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "Transformers",
+      "subtopics": [
+        {
+          "id": "09.1",
+          "title": "Attention intuition",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "09.2",
+          "title": "The transformer architecture",
+          "resources": [
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "09.3",
+          "title": "Tokenization and pretraining",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "09.4",
+          "title": "Fine-tuning transformers",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "09.5",
+          "title": "Efficient attention overview",
+          "resources": [
+            { "name": "arXiv", "url": "https://arxiv.org/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Generative Models",
+      "subtopics": [
+        {
+          "id": "10.1",
+          "title": "Autoencoders for representation learning",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "Dive into Deep Learning", "url": "https://d2l.ai/" }
+          ]
+        },
+        {
+          "id": "10.2",
+          "title": "VAEs and latent spaces",
+          "resources": [
+            { "name": "Distill", "url": "https://distill.pub/" },
+            { "name": "arXiv", "url": "https://arxiv.org/" }
+          ]
+        },
+        {
+          "id": "10.3",
+          "title": "GANs and training dynamics",
+          "resources": [
+            { "name": "Distill", "url": "https://distill.pub/" },
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" }
+          ]
+        },
+        {
+          "id": "10.4",
+          "title": "Diffusion models intuition",
+          "resources": [
+            { "name": "Lilian Weng Blog", "url": "https://lilianweng.github.io/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "LLMs in Practice",
+      "subtopics": [
+        {
+          "id": "11.1",
+          "title": "Tokens, context windows and sampling",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "11.2",
+          "title": "Prompting and structured outputs",
+          "resources": [
+            { "name": "Anthropic Docs", "url": "https://docs.anthropic.com/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "11.3",
+          "title": "RAG: grounding models in your data",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "arXiv", "url": "https://arxiv.org/" }
+          ]
+        },
+        {
+          "id": "11.4",
+          "title": "Evaluating language models",
+          "resources": [
+            { "name": "arXiv", "url": "https://arxiv.org/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "Training at Scale",
+      "subtopics": [
+        {
+          "id": "12.1",
+          "title": "Data parallelism overview",
+          "resources": [
+            { "name": "Lightning AI", "url": "https://lightning.ai/" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        },
+        {
+          "id": "12.2",
+          "title": "Mixed precision training",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "Lightning AI", "url": "https://lightning.ai/" }
+          ]
+        },
+        {
+          "id": "12.3",
+          "title": "Checkpointing and resuming runs",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "MLflow", "url": "https://mlflow.org/" }
+          ]
+        },
+        {
+          "id": "12.4",
+          "title": "Tracking experiments",
+          "resources": [
+            { "name": "MLflow", "url": "https://mlflow.org/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Compression and Deployment",
+      "subtopics": [
+        {
+          "id": "13.1",
+          "title": "Quantization and pruning",
+          "resources": [
+            { "name": "ONNX", "url": "https://onnx.ai/" },
+            { "name": "Dive into Deep Learning", "url": "https://d2l.ai/" }
+          ]
+        },
+        {
+          "id": "13.2",
+          "title": "Knowledge distillation",
+          "resources": [
+            { "name": "Distill", "url": "https://distill.pub/" },
+            { "name": "arXiv", "url": "https://arxiv.org/" }
+          ]
+        },
+        {
+          "id": "13.3",
+          "title": "Exporting models with ONNX",
+          "resources": [
+            { "name": "ONNX", "url": "https://onnx.ai/" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        },
+        {
+          "id": "13.4",
+          "title": "Serving models behind an API",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "title": "Capstone Projects and Portfolio",
+      "subtopics": [
+        {
+          "id": "14.1",
+          "title": "Vision capstone: classifier with a demo",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" }
+          ]
+        },
+        {
+          "id": "14.2",
+          "title": "NLP capstone: fine-tuned text model",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" }
+          ]
+        },
+        {
+          "id": "14.3",
+          "title": "Reproduce a paper result",
+          "resources": [
+            { "name": "arXiv", "url": "https://arxiv.org/" },
+            { "name": "Papers With Code", "url": "https://paperswithcode.com/" }
+          ]
+        },
+        {
+          "id": "14.4",
+          "title": "Portfolio: repos, demos and interview prep",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    }
+  ]
+}

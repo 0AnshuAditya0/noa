@@ -1,0 +1,605 @@
+{
+  "id": "ai",
+  "name": "ai",
+  "title": "Artificial Intelligence",
+  "description": "Beginner-first artificial intelligence path: Python and math prerequisites, classical AI (search and logic), machine learning, deep learning, vision, NLP, LLMs, safety, deployment and portfolio projects.",
+  "id_policy": "IDs are permanent, never renumber. New topics get new IDs.",
+  "topics": [
+    {
+      "id": "01",
+      "title": "Python for AI",
+      "subtopics": [
+        {
+          "id": "01.1",
+          "title": "Python refresher: functions, lists, dicts",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" }
+          ]
+        },
+        {
+          "id": "01.2",
+          "title": "Jupyter notebooks and Google Colab",
+          "resources": [
+            { "name": "Jupyter", "url": "https://jupyter.org/" },
+            { "name": "Google Colab", "url": "https://colab.research.google.com/" }
+          ]
+        },
+        {
+          "id": "01.3",
+          "title": "NumPy basics: arrays and vectorization",
+          "resources": [
+            { "name": "NumPy Docs", "url": "https://numpy.org/doc/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "01.4",
+          "title": "Pandas basics: DataFrames and series",
+          "resources": [
+            { "name": "Pandas Docs", "url": "https://pandas.pydata.org/docs/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "01.5",
+          "title": "Git for AI work: repos and experiment history",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "Math Foundations",
+      "subtopics": [
+        {
+          "id": "02.1",
+          "title": "Vectors, matrices and dot products",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "02.2",
+          "title": "Probability basics: events and expected value",
+          "resources": [
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" },
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" }
+          ]
+        },
+        {
+          "id": "02.3",
+          "title": "Bayes theorem and distributions",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "02.4",
+          "title": "Derivatives and gradients intuition",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "02.5",
+          "title": "Statistics for AI: sampling and confidence",
+          "resources": [
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "Agents and Search",
+      "subtopics": [
+        {
+          "id": "03.1",
+          "title": "Intelligent agents and problem formulation",
+          "resources": [
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" },
+            { "name": "Elements of AI", "url": "https://www.elementsofai.com/" }
+          ]
+        },
+        {
+          "id": "03.2",
+          "title": "Uninformed search: BFS, DFS and UCS",
+          "resources": [
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "03.3",
+          "title": "Heuristic search and A-star",
+          "resources": [
+            { "name": "Red Blob Games A-star Guide", "url": "https://www.redblobgames.com/pathfinding/a-star/introduction.html" },
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" }
+          ]
+        },
+        {
+          "id": "03.4",
+          "title": "Adversarial search and minimax",
+          "resources": [
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" },
+            { "name": "Chess Programming Wiki", "url": "https://www.chessprogramming.org/" }
+          ]
+        },
+        {
+          "id": "03.5",
+          "title": "Build a search project: maze solver",
+          "resources": [
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" },
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "Knowledge and Logic",
+      "subtopics": [
+        {
+          "id": "04.1",
+          "title": "Propositional logic and inference",
+          "resources": [
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "04.2",
+          "title": "First-order logic basics",
+          "resources": [
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" },
+            { "name": "Stanford Encyclopedia of Philosophy", "url": "https://plato.stanford.edu/" }
+          ]
+        },
+        {
+          "id": "04.3",
+          "title": "Logic programming with Prolog",
+          "resources": [
+            { "name": "SWI-Prolog", "url": "https://www.swi-prolog.org/" },
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" }
+          ]
+        },
+        {
+          "id": "04.4",
+          "title": "Planning and scheduling in practice",
+          "resources": [
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "Machine Learning Basics",
+      "subtopics": [
+        {
+          "id": "05.1",
+          "title": "ML thinking: features, labels and the sklearn API",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "05.2",
+          "title": "Regression: predicting numbers",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        },
+        {
+          "id": "05.3",
+          "title": "Classification: predicting categories",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Machine Learning Coursera Course", "url": "https://www.coursera.org/learn/machine-learning" }
+          ]
+        },
+        {
+          "id": "05.4",
+          "title": "Clustering: finding groups in data",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" }
+          ]
+        },
+        {
+          "id": "05.5",
+          "title": "Overfitting and validation splits",
+          "resources": [
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" },
+            { "name": "Machine Learning Coursera Course", "url": "https://www.coursera.org/learn/machine-learning" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "Data and Evaluation",
+      "subtopics": [
+        {
+          "id": "06.1",
+          "title": "Exploratory analysis with pandas",
+          "resources": [
+            { "name": "Pandas Docs", "url": "https://pandas.pydata.org/docs/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "06.2",
+          "title": "Visualizing data with Matplotlib and Seaborn",
+          "resources": [
+            { "name": "Matplotlib", "url": "https://matplotlib.org/" },
+            { "name": "Seaborn", "url": "https://seaborn.pydata.org/" }
+          ]
+        },
+        {
+          "id": "06.3",
+          "title": "Classification metrics: precision, recall, F1",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "06.4",
+          "title": "Cross-validation done right",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "06.5",
+          "title": "Biased data and leakage",
+          "resources": [
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" },
+            { "name": "Elements of AI", "url": "https://www.elementsofai.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "Deep Learning Foundations",
+      "subtopics": [
+        {
+          "id": "07.1",
+          "title": "Perceptrons, MLPs and activations",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "07.2",
+          "title": "PyTorch tensors and autograd",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "PyTorch", "url": "https://pytorch.org/" }
+          ]
+        },
+        {
+          "id": "07.3",
+          "title": "Training loops, loss and optimizers",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" }
+          ]
+        },
+        {
+          "id": "07.4",
+          "title": "Regularization and dropout",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "07.5",
+          "title": "CNN basics for grid-like data",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "Computer Vision",
+      "subtopics": [
+        {
+          "id": "08.1",
+          "title": "CNNs and transfer learning",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        },
+        {
+          "id": "08.2",
+          "title": "Object detection overview",
+          "resources": [
+            { "name": "COCO Dataset", "url": "https://cocodataset.org/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "08.3",
+          "title": "Segmentation overview",
+          "resources": [
+            { "name": "COCO Dataset", "url": "https://cocodataset.org/" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        },
+        {
+          "id": "08.4",
+          "title": "Vision project: image classifier",
+          "resources": [
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" },
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "NLP Foundations",
+      "subtopics": [
+        {
+          "id": "09.1",
+          "title": "Tokenization and text preprocessing",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "09.2",
+          "title": "Word embeddings",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "09.3",
+          "title": "Sequence models: RNNs",
+          "resources": [
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        },
+        {
+          "id": "09.4",
+          "title": "Speech and audio overview",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Transformers and LLMs",
+      "subtopics": [
+        {
+          "id": "10.1",
+          "title": "Attention intuition",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "10.2",
+          "title": "The transformer architecture",
+          "resources": [
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "10.3",
+          "title": "Pretraining and scaling",
+          "resources": [
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" },
+            { "name": "arXiv", "url": "https://arxiv.org/" }
+          ]
+        },
+        {
+          "id": "10.4",
+          "title": "Fine-tuning pretrained models",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "10.5",
+          "title": "Open vs closed models",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Prompting, RAG and Agents",
+      "subtopics": [
+        {
+          "id": "11.1",
+          "title": "Prompting basics and patterns",
+          "resources": [
+            { "name": "Anthropic Docs", "url": "https://docs.anthropic.com/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "11.2",
+          "title": "Structured outputs and function calling",
+          "resources": [
+            { "name": "Anthropic Docs", "url": "https://docs.anthropic.com/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "11.3",
+          "title": "RAG: retrieval-augmented generation",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "arXiv", "url": "https://arxiv.org/" }
+          ]
+        },
+        {
+          "id": "11.4",
+          "title": "Agents and tool use",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        },
+        {
+          "id": "11.5",
+          "title": "Evaluating AI systems",
+          "resources": [
+            { "name": "arXiv", "url": "https://arxiv.org/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "AI Safety and Ethics",
+      "subtopics": [
+        {
+          "id": "12.1",
+          "title": "Bias and fairness in models",
+          "resources": [
+            { "name": "Elements of AI", "url": "https://www.elementsofai.com/" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "12.2",
+          "title": "Red-teaming and misuse",
+          "resources": [
+            { "name": "arXiv", "url": "https://arxiv.org/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "12.3",
+          "title": "Alignment problem overview",
+          "resources": [
+            { "name": "arXiv", "url": "https://arxiv.org/" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "12.4",
+          "title": "Responsible use and AI policy basics",
+          "resources": [
+            { "name": "Elements of AI", "url": "https://www.elementsofai.com/" },
+            { "name": "arXiv", "url": "https://arxiv.org/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Deploying AI",
+      "subtopics": [
+        {
+          "id": "13.1",
+          "title": "Serving models behind an API",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "13.2",
+          "title": "Inference cost and latency",
+          "resources": [
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        },
+        {
+          "id": "13.3",
+          "title": "Monitoring and feedback loops",
+          "resources": [
+            { "name": "MLflow", "url": "https://mlflow.org/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        },
+        {
+          "id": "13.4",
+          "title": "Robotics and embodied AI overview",
+          "resources": [
+            { "name": "ROS", "url": "https://www.ros.org/" },
+            { "name": "Elements of AI", "url": "https://www.elementsofai.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "title": "Projects and Portfolio",
+      "subtopics": [
+        {
+          "id": "14.1",
+          "title": "Classical AI project: game-playing agent",
+          "resources": [
+            { "name": "CS50 AI with Python", "url": "https://cs50.harvard.edu/ai/" },
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" }
+          ]
+        },
+        {
+          "id": "14.2",
+          "title": "RAG chatbot end to end",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        },
+        {
+          "id": "14.3",
+          "title": "Vision or NLP project with a demo",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" }
+          ]
+        },
+        {
+          "id": "14.4",
+          "title": "Portfolio: repos, READMEs and interview prep",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    }
+  ]
+}

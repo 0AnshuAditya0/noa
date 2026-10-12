@@ -1,0 +1,589 @@
+{
+  "id": "dev",
+  "name": "dev",
+  "title": "DevOps / Cloud",
+  "description": "Beginner-first DevOps and cloud path: Linux and Git prerequisites, networking, scripting, CI, Docker, Kubernetes, cloud basics, Terraform, monitoring, security and capstone projects.",
+  "id_policy": "IDs are permanent, never renumber. New topics get new IDs.",
+  "topics": [
+    {
+      "id": "01",
+      "title": "Linux and CLI Foundations",
+      "subtopics": [
+        {
+          "id": "01.1",
+          "title": "Files, permissions and users",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "01.2",
+          "title": "Pipes, grep, ssh and scp",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "01.3",
+          "title": "Processes, systemd and logs",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "Python logging Docs", "url": "https://docs.python.org/3/library/logging.html" }
+          ]
+        },
+        {
+          "id": "01.4",
+          "title": "Package managers and installing software",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "01.5",
+          "title": "Cron and scheduled tasks",
+          "resources": [
+            { "name": "Crontab Guru", "url": "https://crontab.guru/" },
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "Git and Collaboration",
+      "subtopics": [
+        {
+          "id": "02.1",
+          "title": "Git basics: commit, branch, merge",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "02.2",
+          "title": "Remotes, pull requests and reviews",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        },
+        {
+          "id": "02.3",
+          "title": "Undoing changes and .gitignore",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "02.4",
+          "title": "Branching strategies: trunk and GitFlow",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "02.5",
+          "title": "Monorepos vs polyrepos",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "Networking for DevOps",
+      "subtopics": [
+        {
+          "id": "03.1",
+          "title": "DNS, IP and subnets",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "03.2",
+          "title": "TCP/UDP, ports and firewalls",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" }
+          ]
+        },
+        {
+          "id": "03.3",
+          "title": "HTTP, HTTPS and TLS handshakes",
+          "resources": [
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "03.4",
+          "title": "Load balancing and reverse proxies",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "03.5",
+          "title": "Debugging networks: ping, curl, traceroute",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "Scripting for Automation",
+      "subtopics": [
+        {
+          "id": "04.1",
+          "title": "Python refresher for operators",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" }
+          ]
+        },
+        {
+          "id": "04.2",
+          "title": "Files, subprocess and exit codes",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" }
+          ]
+        },
+        {
+          "id": "04.3",
+          "title": "Calling APIs from scripts",
+          "resources": [
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "04.4",
+          "title": "Bash one-liners and small scripts",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "CI Pipelines",
+      "subtopics": [
+        {
+          "id": "05.1",
+          "title": "First workflow with GitHub Actions",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        },
+        {
+          "id": "05.2",
+          "title": "Test gates that block bad merges",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "Pytest Docs", "url": "https://docs.pytest.org/en/stable/" }
+          ]
+        },
+        {
+          "id": "05.3",
+          "title": "Artifacts and dependency caching",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" }
+          ]
+        },
+        {
+          "id": "05.4",
+          "title": "CI concepts across platforms",
+          "resources": [
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "Docker",
+      "subtopics": [
+        {
+          "id": "06.1",
+          "title": "Images vs containers",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "06.2",
+          "title": "Writing Dockerfiles",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "06.3",
+          "title": "Multi-stage builds and layer caching",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        },
+        {
+          "id": "06.4",
+          "title": "Compose for multi-service apps",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        },
+        {
+          "id": "06.5",
+          "title": "Registries and image tagging",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "Kubernetes Basics",
+      "subtopics": [
+        {
+          "id": "07.1",
+          "title": "Clusters, nodes and kubectl",
+          "resources": [
+            { "name": "Kubernetes Docs", "url": "https://kubernetes.io/docs/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "07.2",
+          "title": "Pods and Deployments",
+          "resources": [
+            { "name": "Kubernetes Docs", "url": "https://kubernetes.io/docs/" },
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" }
+          ]
+        },
+        {
+          "id": "07.3",
+          "title": "Services and Ingress",
+          "resources": [
+            { "name": "Kubernetes Docs", "url": "https://kubernetes.io/docs/" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "07.4",
+          "title": "ConfigMaps, Secrets and volumes",
+          "resources": [
+            { "name": "Kubernetes Docs", "url": "https://kubernetes.io/docs/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "07.5",
+          "title": "Health probes and rolling updates",
+          "resources": [
+            { "name": "Kubernetes Docs", "url": "https://kubernetes.io/docs/" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "Cloud Fundamentals",
+      "subtopics": [
+        {
+          "id": "08.1",
+          "title": "Regions, zones and pricing models",
+          "resources": [
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "08.2",
+          "title": "IAM and least privilege",
+          "resources": [
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "08.3",
+          "title": "Compute: VMs and serverless",
+          "resources": [
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        },
+        {
+          "id": "08.4",
+          "title": "Object storage and CDNs",
+          "resources": [
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "08.5",
+          "title": "Managed databases",
+          "resources": [
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "Infrastructure as Code",
+      "subtopics": [
+        {
+          "id": "09.1",
+          "title": "Why IaC: declarative vs imperative",
+          "resources": [
+            { "name": "Terraform Docs", "url": "https://developer.hashicorp.com/terraform/docs" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "09.2",
+          "title": "HCL basics: resources and variables",
+          "resources": [
+            { "name": "Terraform Docs", "url": "https://developer.hashicorp.com/terraform/docs" },
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" }
+          ]
+        },
+        {
+          "id": "09.3",
+          "title": "State, plan and apply safely",
+          "resources": [
+            { "name": "Terraform Docs", "url": "https://developer.hashicorp.com/terraform/docs" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        },
+        {
+          "id": "09.4",
+          "title": "Reusable modules",
+          "resources": [
+            { "name": "Terraform Docs", "url": "https://developer.hashicorp.com/terraform/docs" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Monitoring and Logging",
+      "subtopics": [
+        {
+          "id": "10.1",
+          "title": "Metrics that matter: RED and USE",
+          "resources": [
+            { "name": "Prometheus Docs", "url": "https://prometheus.io/docs/" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        },
+        {
+          "id": "10.2",
+          "title": "Dashboards with Grafana",
+          "resources": [
+            { "name": "Grafana Docs", "url": "https://grafana.com/docs/" },
+            { "name": "Prometheus Docs", "url": "https://prometheus.io/docs/" }
+          ]
+        },
+        {
+          "id": "10.3",
+          "title": "Centralized logs and searching them",
+          "resources": [
+            { "name": "Python logging Docs", "url": "https://docs.python.org/3/library/logging.html" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "10.4",
+          "title": "Alerting and on-call basics",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Security and Secrets",
+      "subtopics": [
+        {
+          "id": "11.1",
+          "title": "Secrets in CI/CD pipelines",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" }
+          ]
+        },
+        {
+          "id": "11.2",
+          "title": "TLS everywhere with free certificates",
+          "resources": [
+            { "name": "Let's Encrypt", "url": "https://letsencrypt.org/" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "11.3",
+          "title": "Container security basics",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "OWASP", "url": "https://owasp.org/" }
+          ]
+        },
+        {
+          "id": "11.4",
+          "title": "Patching and least privilege reviews",
+          "resources": [
+            { "name": "OWASP", "url": "https://owasp.org/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "Databases on Ops",
+      "subtopics": [
+        {
+          "id": "12.1",
+          "title": "Running Postgres in production",
+          "resources": [
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" },
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" }
+          ]
+        },
+        {
+          "id": "12.2",
+          "title": "Backups and point-in-time recovery",
+          "resources": [
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" },
+            { "name": "SQLite Docs", "url": "https://www.sqlite.org/docs.html" }
+          ]
+        },
+        {
+          "id": "12.3",
+          "title": "Migrations during deploys",
+          "resources": [
+            { "name": "Django Docs", "url": "https://docs.djangoproject.com/en/stable/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        },
+        {
+          "id": "12.4",
+          "title": "Read replicas and failover",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Release Strategies",
+      "subtopics": [
+        {
+          "id": "13.1",
+          "title": "Blue-green and canary deploys",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        },
+        {
+          "id": "13.2",
+          "title": "Feature flags to decouple deploy and release",
+          "resources": [
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        },
+        {
+          "id": "13.3",
+          "title": "Rollbacks that actually work",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "Kubernetes Docs", "url": "https://kubernetes.io/docs/" }
+          ]
+        },
+        {
+          "id": "13.4",
+          "title": "SLOs, error budgets and postmortems",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "title": "Capstone Projects and Portfolio",
+      "subtopics": [
+        {
+          "id": "14.1",
+          "title": "Homelab: self-host an app with Docker",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" }
+          ]
+        },
+        {
+          "id": "14.2",
+          "title": "Full pipeline: IaC, CI and Kubernetes deploy",
+          "resources": [
+            { "name": "Terraform Docs", "url": "https://developer.hashicorp.com/terraform/docs" },
+            { "name": "Kubernetes Docs", "url": "https://kubernetes.io/docs/" }
+          ]
+        },
+        {
+          "id": "14.3",
+          "title": "Monitoring stack with dashboards and alerts",
+          "resources": [
+            { "name": "Prometheus Docs", "url": "https://prometheus.io/docs/" },
+            { "name": "Grafana Docs", "url": "https://grafana.com/docs/" }
+          ]
+        },
+        {
+          "id": "14.4",
+          "title": "Portfolio docs and DevOps interviews",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    }
+  ]
+}

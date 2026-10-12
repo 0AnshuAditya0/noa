@@ -1,0 +1,651 @@
+{
+  "id": "ml",
+  "name": "ml",
+  "title": "Machine Learning",
+  "description": "Beginner-first machine learning path: Python and math prerequisites, data handling, classical ML, deep learning, LLMs, MLOps basics and portfolio projects.",
+  "id_policy": "IDs are permanent, never renumber. New topics get new IDs.",
+  "topics": [
+    {
+      "id": "01",
+      "title": "Python for ML",
+      "subtopics": [
+        {
+          "id": "01.1",
+          "title": "Python refresher: functions, lists, dicts",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" }
+          ]
+        },
+        {
+          "id": "01.2",
+          "title": "Jupyter notebooks and Google Colab",
+          "resources": [
+            { "name": "Jupyter", "url": "https://jupyter.org/" },
+            { "name": "Google Colab", "url": "https://colab.research.google.com/" }
+          ]
+        },
+        {
+          "id": "01.3",
+          "title": "NumPy basics: arrays and vectorization",
+          "resources": [
+            { "name": "NumPy Docs", "url": "https://numpy.org/doc/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "01.4",
+          "title": "Pandas basics: DataFrames and series",
+          "resources": [
+            { "name": "Pandas Docs", "url": "https://pandas.pydata.org/docs/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "01.5",
+          "title": "Git for ML work: repos and versioning notebooks",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "Linear Algebra",
+      "subtopics": [
+        {
+          "id": "02.1",
+          "title": "Vectors, matrices and dot products",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "02.2",
+          "title": "Matrix multiplication, transpose and inverse",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "MIT 18.06 Linear Algebra", "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/" }
+          ]
+        },
+        {
+          "id": "02.3",
+          "title": "Eigenvectors and eigenvalues",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "MIT 18.06 Linear Algebra", "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/" }
+          ]
+        },
+        {
+          "id": "02.4",
+          "title": "SVD and the intuition behind PCA",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        },
+        {
+          "id": "02.5",
+          "title": "Linear algebra with NumPy",
+          "resources": [
+            { "name": "NumPy Docs", "url": "https://numpy.org/doc/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "Calculus and Statistics",
+      "subtopics": [
+        {
+          "id": "03.1",
+          "title": "Derivatives and gradients",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "03.2",
+          "title": "Chain rule and backpropagation intuition",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "03.3",
+          "title": "Probability basics: events and expected value",
+          "resources": [
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" },
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" }
+          ]
+        },
+        {
+          "id": "03.4",
+          "title": "Distributions and Bayes theorem",
+          "resources": [
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" },
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" }
+          ]
+        },
+        {
+          "id": "03.5",
+          "title": "Hypothesis testing and confidence intervals",
+          "resources": [
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "Data Handling with NumPy and Pandas",
+      "subtopics": [
+        {
+          "id": "04.1",
+          "title": "NumPy reshaping, broadcasting and aggregation",
+          "resources": [
+            { "name": "NumPy Docs", "url": "https://numpy.org/doc/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "04.2",
+          "title": "Pandas selection, filtering and groupby",
+          "resources": [
+            { "name": "Pandas Docs", "url": "https://pandas.pydata.org/docs/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "04.3",
+          "title": "Cleaning data: missing values and duplicates",
+          "resources": [
+            { "name": "Pandas Docs", "url": "https://pandas.pydata.org/docs/" },
+            { "name": "freeCodeCamp Machine Learning with Python", "url": "https://www.freecodecamp.org/learn/machine-learning-with-python/" }
+          ]
+        },
+        {
+          "id": "04.4",
+          "title": "Merging datasets and working with CSVs",
+          "resources": [
+            { "name": "Pandas Docs", "url": "https://pandas.pydata.org/docs/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "04.5",
+          "title": "Train/test splits and scikit-learn datasets",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "Visualization and EDA",
+      "subtopics": [
+        {
+          "id": "05.1",
+          "title": "Matplotlib: line, bar and scatter plots",
+          "resources": [
+            { "name": "Matplotlib", "url": "https://matplotlib.org/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "05.2",
+          "title": "Seaborn: distributions and relationships",
+          "resources": [
+            { "name": "Seaborn", "url": "https://seaborn.pydata.org/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "05.3",
+          "title": "Exploratory data analysis workflow",
+          "resources": [
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" },
+            { "name": "freeCodeCamp Machine Learning with Python", "url": "https://www.freecodecamp.org/learn/machine-learning-with-python/" }
+          ]
+        },
+        {
+          "id": "05.4",
+          "title": "Presenting findings with notebooks and charts",
+          "resources": [
+            { "name": "Jupyter", "url": "https://jupyter.org/" },
+            { "name": "Matplotlib", "url": "https://matplotlib.org/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "Classical ML with scikit-learn",
+      "subtopics": [
+        {
+          "id": "06.1",
+          "title": "ML thinking: features, labels and the sklearn API",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "06.2",
+          "title": "Linear and logistic regression",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        },
+        {
+          "id": "06.3",
+          "title": "kNN and support vector machines",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" }
+          ]
+        },
+        {
+          "id": "06.4",
+          "title": "Naive Bayes for text and tabular data",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" }
+          ]
+        },
+        {
+          "id": "06.5",
+          "title": "Regularization: Ridge, Lasso and ElasticNet",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "Model Evaluation",
+      "subtopics": [
+        {
+          "id": "07.1",
+          "title": "Train/validation/test splits and cross-validation",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "07.2",
+          "title": "Classification metrics: accuracy, precision, recall, F1",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "07.3",
+          "title": "Regression metrics: MAE, RMSE and R-squared",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        },
+        {
+          "id": "07.4",
+          "title": "Overfitting vs underfitting and learning curves",
+          "resources": [
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" },
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" }
+          ]
+        },
+        {
+          "id": "07.5",
+          "title": "Imbalanced data: stratification and resampling",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "Feature Engineering and Pipelines",
+      "subtopics": [
+        {
+          "id": "08.1",
+          "title": "Encoding categoricals and scaling numerics",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "08.2",
+          "title": "Pipelines and ColumnTransformer",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "08.3",
+          "title": "Feature selection and importance",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "StatLearning Book Site", "url": "https://www.statlearning.com/" }
+          ]
+        },
+        {
+          "id": "08.4",
+          "title": "Missing-data strategies in production code",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Pandas Docs", "url": "https://pandas.pydata.org/docs/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "Trees and Ensembles",
+      "subtopics": [
+        {
+          "id": "09.1",
+          "title": "Decision trees and splitting criteria",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" }
+          ]
+        },
+        {
+          "id": "09.2",
+          "title": "Random forests and bagging",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" }
+          ]
+        },
+        {
+          "id": "09.3",
+          "title": "Gradient boosting: XGBoost and LightGBM",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" }
+          ]
+        },
+        {
+          "id": "09.4",
+          "title": "Hyperparameter tuning with grid and random search",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "09.5",
+          "title": "Choosing models for tabular problems",
+          "resources": [
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Unsupervised Learning",
+      "subtopics": [
+        {
+          "id": "10.1",
+          "title": "K-means clustering",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" }
+          ]
+        },
+        {
+          "id": "10.2",
+          "title": "Hierarchical clustering and DBSCAN",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" }
+          ]
+        },
+        {
+          "id": "10.3",
+          "title": "PCA for dimensionality reduction",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" }
+          ]
+        },
+        {
+          "id": "10.4",
+          "title": "t-SNE and UMAP for visualization",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "scikit-learn Docs", "url": "https://scikit-learn.org/stable/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Deep Learning Foundations",
+      "subtopics": [
+        {
+          "id": "11.1",
+          "title": "Perceptrons, MLPs and activations",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "11.2",
+          "title": "PyTorch tensors and autograd",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "PyTorch", "url": "https://pytorch.org/" }
+          ]
+        },
+        {
+          "id": "11.3",
+          "title": "Training loops, loss functions and optimizers",
+          "resources": [
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" },
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" }
+          ]
+        },
+        {
+          "id": "11.4",
+          "title": "CNNs for image data",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "11.5",
+          "title": "Sequence basics: RNNs and time series",
+          "resources": [
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" },
+            { "name": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "Transformers and NLP",
+      "subtopics": [
+        {
+          "id": "12.1",
+          "title": "Tokenization and embeddings",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "12.2",
+          "title": "Attention and the transformer architecture",
+          "resources": [
+            { "name": "3Blue1Brown YouTube", "url": "https://www.youtube.com/@3blue1brown" },
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" }
+          ]
+        },
+        {
+          "id": "12.3",
+          "title": "Fine-tuning pretrained models",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "12.4",
+          "title": "Text classification and NER in practice",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" }
+          ]
+        },
+        {
+          "id": "12.5",
+          "title": "Evaluating language models",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Large Language Models",
+      "subtopics": [
+        {
+          "id": "13.1",
+          "title": "How LLMs work: pretraining and tokens",
+          "resources": [
+            { "name": "Andrej Karpathy YouTube", "url": "https://www.youtube.com/@AndrejKarpathy" },
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" }
+          ]
+        },
+        {
+          "id": "13.2",
+          "title": "Prompting and structured outputs",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "Google Machine Learning Crash Course", "url": "https://developers.google.com/machine-learning/crash-course" }
+          ]
+        },
+        {
+          "id": "13.3",
+          "title": "RAG: retrieval-augmented generation",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "arXiv", "url": "https://arxiv.org/" }
+          ]
+        },
+        {
+          "id": "13.4",
+          "title": "LLM agents and tool use overview",
+          "resources": [
+            { "name": "Hugging Face Docs", "url": "https://huggingface.co/docs" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "title": "MLOps Basics",
+      "subtopics": [
+        {
+          "id": "14.1",
+          "title": "Experiment tracking with MLflow",
+          "resources": [
+            { "name": "MLflow", "url": "https://mlflow.org/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "14.2",
+          "title": "Model versioning and registries",
+          "resources": [
+            { "name": "MLflow", "url": "https://mlflow.org/" },
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" }
+          ]
+        },
+        {
+          "id": "14.3",
+          "title": "Serving models with an API",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        },
+        {
+          "id": "14.4",
+          "title": "Docker and simple deployments",
+          "resources": [
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15",
+      "title": "Projects and Portfolio",
+      "subtopics": [
+        {
+          "id": "15.1",
+          "title": "First Kaggle competition entry",
+          "resources": [
+            { "name": "Kaggle", "url": "https://www.kaggle.com/" },
+            { "name": "Kaggle Learn", "url": "https://www.kaggle.com/learn" }
+          ]
+        },
+        {
+          "id": "15.2",
+          "title": "End-to-end project: data to deployed demo",
+          "resources": [
+            { "name": "fast.ai Course", "url": "https://course.fast.ai/" },
+            { "name": "freeCodeCamp Machine Learning with Python", "url": "https://www.freecodecamp.org/learn/machine-learning-with-python/" }
+          ]
+        },
+        {
+          "id": "15.3",
+          "title": "Portfolio: GitHub repos, READMEs and demos",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        },
+        {
+          "id": "15.4",
+          "title": "ML interview prep: concepts and case walkthroughs",
+          "resources": [
+            { "name": "StatQuest YouTube", "url": "https://www.youtube.com/@statquest" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,597 @@
+{
+  "id": "frontend",
+  "name": "frontend",
+  "title": "Frontend",
+  "description": "Beginner-first frontend path: web foundations, HTML, CSS, JavaScript, TypeScript, React, styling, testing, performance, deployment and portfolio projects.",
+  "id_policy": "IDs are permanent, never renumber. New topics get new IDs.",
+  "topics": [
+    {
+      "id": "01",
+      "title": "Web Foundations",
+      "subtopics": [
+        {
+          "id": "01.1",
+          "title": "How the web works: browsers, servers, DNS",
+          "resources": [
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "01.2",
+          "title": "Browser DevTools: inspect, console, network",
+          "resources": [
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" },
+            { "name": "web.dev", "url": "https://web.dev/" }
+          ]
+        },
+        {
+          "id": "01.3",
+          "title": "Git basics: commit, branch, push",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "01.4",
+          "title": "How websites get published: hosting overview",
+          "resources": [
+            { "name": "web.dev", "url": "https://web.dev/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "01.5",
+          "title": "Setting up a code editor and workflow",
+          "resources": [
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "HTML",
+      "subtopics": [
+        {
+          "id": "02.1",
+          "title": "Document structure and semantic tags",
+          "resources": [
+            { "name": "MDN HTML Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+            { "name": "freeCodeCamp Responsive Web Design", "url": "https://www.freecodecamp.org/learn/responsive-web-design/" }
+          ]
+        },
+        {
+          "id": "02.2",
+          "title": "Links, images and media",
+          "resources": [
+            { "name": "MDN HTML Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+            { "name": "freeCodeCamp Responsive Web Design", "url": "https://www.freecodecamp.org/learn/responsive-web-design/" }
+          ]
+        },
+        {
+          "id": "02.3",
+          "title": "Forms, inputs and validation",
+          "resources": [
+            { "name": "MDN HTML Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+            { "name": "web.dev", "url": "https://web.dev/" }
+          ]
+        },
+        {
+          "id": "02.4",
+          "title": "Accessibility basics: labels, alt, landmarks",
+          "resources": [
+            { "name": "W3C Web Accessibility Initiative", "url": "https://www.w3.org/WAI/" },
+            { "name": "MDN HTML Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML" }
+          ]
+        },
+        {
+          "id": "02.5",
+          "title": "SEO basics: titles, meta, headings",
+          "resources": [
+            { "name": "web.dev", "url": "https://web.dev/" },
+            { "name": "MDN HTML Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "CSS Fundamentals",
+      "subtopics": [
+        {
+          "id": "03.1",
+          "title": "Selectors, specificity and the cascade",
+          "resources": [
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "name": "Kevin Powell YouTube", "url": "https://www.youtube.com/@KevinPowell" }
+          ]
+        },
+        {
+          "id": "03.2",
+          "title": "Box model, margin, padding and borders",
+          "resources": [
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "name": "freeCodeCamp Responsive Web Design", "url": "https://www.freecodecamp.org/learn/responsive-web-design/" }
+          ]
+        },
+        {
+          "id": "03.3",
+          "title": "Flexbox layouts",
+          "resources": [
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "name": "Kevin Powell YouTube", "url": "https://www.youtube.com/@KevinPowell" }
+          ]
+        },
+        {
+          "id": "03.4",
+          "title": "Grid layouts",
+          "resources": [
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "name": "Kevin Powell YouTube", "url": "https://www.youtube.com/@KevinPowell" }
+          ]
+        },
+        {
+          "id": "03.5",
+          "title": "Positioning and z-index",
+          "resources": [
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "name": "freeCodeCamp Responsive Web Design", "url": "https://www.freecodecamp.org/learn/responsive-web-design/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "Responsive Design and Modern CSS",
+      "subtopics": [
+        {
+          "id": "04.1",
+          "title": "Media queries and mobile-first design",
+          "resources": [
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "name": "freeCodeCamp Responsive Web Design", "url": "https://www.freecodecamp.org/learn/responsive-web-design/" }
+          ]
+        },
+        {
+          "id": "04.2",
+          "title": "Custom properties and theming",
+          "resources": [
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "name": "Kevin Powell YouTube", "url": "https://www.youtube.com/@KevinPowell" }
+          ]
+        },
+        {
+          "id": "04.3",
+          "title": "Transitions and animations",
+          "resources": [
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+            { "name": "web.dev", "url": "https://web.dev/" }
+          ]
+        },
+        {
+          "id": "04.4",
+          "title": "Browser support and Can I Use",
+          "resources": [
+            { "name": "Can I Use", "url": "https://caniuse.com/" },
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "JavaScript Basics",
+      "subtopics": [
+        {
+          "id": "05.1",
+          "title": "Syntax, variables and functions",
+          "resources": [
+            { "name": "MDN JavaScript Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+            { "name": "freeCodeCamp JavaScript Algorithms", "url": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/" }
+          ]
+        },
+        {
+          "id": "05.2",
+          "title": "Arrays, objects and JSON",
+          "resources": [
+            { "name": "JavaScript.info", "url": "https://javascript.info/" },
+            { "name": "freeCodeCamp JavaScript Algorithms", "url": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/" }
+          ]
+        },
+        {
+          "id": "05.3",
+          "title": "DOM selection and manipulation",
+          "resources": [
+            { "name": "MDN JavaScript Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+            { "name": "JavaScript.info", "url": "https://javascript.info/" }
+          ]
+        },
+        {
+          "id": "05.4",
+          "title": "Events and forms",
+          "resources": [
+            { "name": "MDN JavaScript Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+            { "name": "JavaScript.info", "url": "https://javascript.info/" }
+          ]
+        },
+        {
+          "id": "05.5",
+          "title": "Fetch API and async basics",
+          "resources": [
+            { "name": "MDN JavaScript Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "Modern JavaScript and Tooling",
+      "subtopics": [
+        {
+          "id": "06.1",
+          "title": "ES6+: arrow functions, destructuring, spread",
+          "resources": [
+            { "name": "JavaScript.info", "url": "https://javascript.info/" },
+            { "name": "freeCodeCamp JavaScript Algorithms", "url": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/" }
+          ]
+        },
+        {
+          "id": "06.2",
+          "title": "Modules: import and export",
+          "resources": [
+            { "name": "MDN JavaScript Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+            { "name": "JavaScript.info", "url": "https://javascript.info/" }
+          ]
+        },
+        {
+          "id": "06.3",
+          "title": "Promises and async/await",
+          "resources": [
+            { "name": "JavaScript.info", "url": "https://javascript.info/" },
+            { "name": "MDN JavaScript Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript" }
+          ]
+        },
+        {
+          "id": "06.4",
+          "title": "npm and package management",
+          "resources": [
+            { "name": "npm Docs", "url": "https://docs.npmjs.com/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "06.5",
+          "title": "Vite: dev server and builds",
+          "resources": [
+            { "name": "Vite", "url": "https://vite.dev/" },
+            { "name": "npm Docs", "url": "https://docs.npmjs.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "TypeScript",
+      "subtopics": [
+        {
+          "id": "07.1",
+          "title": "Types, interfaces and unions",
+          "resources": [
+            { "name": "TypeScript Docs", "url": "https://www.typescriptlang.org/docs/" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "07.2",
+          "title": "Functions and generics",
+          "resources": [
+            { "name": "TypeScript Docs", "url": "https://www.typescriptlang.org/docs/" },
+            { "name": "JavaScript.info", "url": "https://javascript.info/" }
+          ]
+        },
+        {
+          "id": "07.3",
+          "title": "Typing React props and state",
+          "resources": [
+            { "name": "TypeScript Docs", "url": "https://www.typescriptlang.org/docs/" },
+            { "name": "React Docs", "url": "https://react.dev/" }
+          ]
+        },
+        {
+          "id": "07.4",
+          "title": "Strict mode and everyday type errors",
+          "resources": [
+            { "name": "TypeScript Docs", "url": "https://www.typescriptlang.org/docs/" },
+            { "name": "React Docs", "url": "https://react.dev/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "React Foundations",
+      "subtopics": [
+        {
+          "id": "08.1",
+          "title": "Components, JSX and props",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "freeCodeCamp Front End Libraries", "url": "https://www.freecodecamp.org/learn/front-end-development-libraries/" }
+          ]
+        },
+        {
+          "id": "08.2",
+          "title": "State and useState",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "freeCodeCamp Front End Libraries", "url": "https://www.freecodecamp.org/learn/front-end-development-libraries/" }
+          ]
+        },
+        {
+          "id": "08.3",
+          "title": "useEffect and data fetching",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "JavaScript.info", "url": "https://javascript.info/" }
+          ]
+        },
+        {
+          "id": "08.4",
+          "title": "Lists, keys and conditional rendering",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "freeCodeCamp Front End Libraries", "url": "https://www.freecodecamp.org/learn/front-end-development-libraries/" }
+          ]
+        },
+        {
+          "id": "08.5",
+          "title": "Forms and controlled inputs",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "MDN HTML Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTML" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "Advanced React",
+      "subtopics": [
+        {
+          "id": "09.1",
+          "title": "Routing with Next.js pages",
+          "resources": [
+            { "name": "Next.js Docs", "url": "https://nextjs.org/docs" },
+            { "name": "React Docs", "url": "https://react.dev/" }
+          ]
+        },
+        {
+          "id": "09.2",
+          "title": "Server components and SSR basics",
+          "resources": [
+            { "name": "Next.js Docs", "url": "https://nextjs.org/docs" },
+            { "name": "React Docs", "url": "https://react.dev/" }
+          ]
+        },
+        {
+          "id": "09.3",
+          "title": "Global state with Redux",
+          "resources": [
+            { "name": "Redux Docs", "url": "https://redux.js.org/" },
+            { "name": "React Docs", "url": "https://react.dev/" }
+          ]
+        },
+        {
+          "id": "09.4",
+          "title": "Context and custom hooks",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "JavaScript.info", "url": "https://javascript.info/" }
+          ]
+        },
+        {
+          "id": "09.5",
+          "title": "Performance: memo, keys and code splitting",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "web.dev", "url": "https://web.dev/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Styling in React",
+      "subtopics": [
+        {
+          "id": "10.1",
+          "title": "CSS Modules and scoped styles",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" }
+          ]
+        },
+        {
+          "id": "10.2",
+          "title": "Utility-first CSS with Tailwind",
+          "resources": [
+            { "name": "Tailwind CSS Docs", "url": "https://tailwindcss.com/docs" },
+            { "name": "freeCodeCamp Front End Libraries", "url": "https://www.freecodecamp.org/learn/front-end-development-libraries/" }
+          ]
+        },
+        {
+          "id": "10.3",
+          "title": "Dark mode and theming",
+          "resources": [
+            { "name": "Tailwind CSS Docs", "url": "https://tailwindcss.com/docs" },
+            { "name": "MDN CSS Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS" }
+          ]
+        },
+        {
+          "id": "10.4",
+          "title": "Component libraries and design systems",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Testing and Quality",
+      "subtopics": [
+        {
+          "id": "11.1",
+          "title": "Unit testing with Vitest",
+          "resources": [
+            { "name": "Vitest", "url": "https://vitest.dev/" },
+            { "name": "freeCodeCamp Quality Assurance", "url": "https://www.freecodecamp.org/learn/quality-assurance/" }
+          ]
+        },
+        {
+          "id": "11.2",
+          "title": "Component testing with Testing Library",
+          "resources": [
+            { "name": "Testing Library", "url": "https://testing-library.com/" },
+            { "name": "Vitest", "url": "https://vitest.dev/" }
+          ]
+        },
+        {
+          "id": "11.3",
+          "title": "End-to-end testing with Playwright",
+          "resources": [
+            { "name": "Playwright", "url": "https://playwright.dev/" },
+            { "name": "freeCodeCamp Quality Assurance", "url": "https://www.freecodecamp.org/learn/quality-assurance/" }
+          ]
+        },
+        {
+          "id": "11.4",
+          "title": "Linting and formatting JS/TS",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "TypeScript Docs", "url": "https://www.typescriptlang.org/docs/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "Performance and Accessibility",
+      "subtopics": [
+        {
+          "id": "12.1",
+          "title": "Core Web Vitals: LCP, CLS, INP",
+          "resources": [
+            { "name": "web.dev", "url": "https://web.dev/" },
+            { "name": "React Docs", "url": "https://react.dev/" }
+          ]
+        },
+        {
+          "id": "12.2",
+          "title": "Image and font optimization",
+          "resources": [
+            { "name": "web.dev", "url": "https://web.dev/" },
+            { "name": "Next.js Docs", "url": "https://nextjs.org/docs" }
+          ]
+        },
+        {
+          "id": "12.3",
+          "title": "Keyboard access and ARIA",
+          "resources": [
+            { "name": "W3C Web Accessibility Initiative", "url": "https://www.w3.org/WAI/" },
+            { "name": "web.dev", "url": "https://web.dev/" }
+          ]
+        },
+        {
+          "id": "12.4",
+          "title": "Lighthouse audits and fixes",
+          "resources": [
+            { "name": "web.dev", "url": "https://web.dev/" },
+            { "name": "Can I Use", "url": "https://caniuse.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Build and Deploy",
+      "subtopics": [
+        {
+          "id": "13.1",
+          "title": "Production builds with Vite",
+          "resources": [
+            { "name": "Vite", "url": "https://vite.dev/" },
+            { "name": "npm Docs", "url": "https://docs.npmjs.com/" }
+          ]
+        },
+        {
+          "id": "13.2",
+          "title": "Environment variables and config",
+          "resources": [
+            { "name": "Vite", "url": "https://vite.dev/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "13.3",
+          "title": "Deploying to Vercel or Netlify",
+          "resources": [
+            { "name": "Vercel Docs", "url": "https://vercel.com/docs" },
+            { "name": "Netlify Docs", "url": "https://docs.netlify.com/" }
+          ]
+        },
+        {
+          "id": "13.4",
+          "title": "Preview deploys and CI checks",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "Vercel Docs", "url": "https://vercel.com/docs" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "title": "Projects and Portfolio",
+      "subtopics": [
+        {
+          "id": "14.1",
+          "title": "Responsive landing page from scratch",
+          "resources": [
+            { "name": "freeCodeCamp Responsive Web Design", "url": "https://www.freecodecamp.org/learn/responsive-web-design/" },
+            { "name": "Kevin Powell YouTube", "url": "https://www.youtube.com/@KevinPowell" }
+          ]
+        },
+        {
+          "id": "14.2",
+          "title": "React app with API data and routing",
+          "resources": [
+            { "name": "React Docs", "url": "https://react.dev/" },
+            { "name": "Next.js Docs", "url": "https://nextjs.org/docs" }
+          ]
+        },
+        {
+          "id": "14.3",
+          "title": "Full project: tested, themed and deployed",
+          "resources": [
+            { "name": "Vercel Docs", "url": "https://vercel.com/docs" },
+            { "name": "Playwright", "url": "https://playwright.dev/" }
+          ]
+        },
+        {
+          "id": "14.4",
+          "title": "Portfolio site and frontend interviews",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,597 @@
+{
+  "id": "cyber",
+  "name": "cyber",
+  "title": "Cybersecurity",
+  "description": "Beginner-first cybersecurity path: IT and Linux foundations, networking, Python, security fundamentals, cryptography, web and network security, defense, ethical pentesting and portfolio projects.",
+  "id_policy": "IDs are permanent, never renumber. New topics get new IDs.",
+  "topics": [
+    {
+      "id": "01",
+      "title": "IT and Linux Foundations",
+      "subtopics": [
+        {
+          "id": "01.1",
+          "title": "How computers work: OS, files, processes",
+          "resources": [
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "01.2",
+          "title": "Linux files and permissions",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "01.3",
+          "title": "CLI tools: grep, pipes, ssh",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "01.4",
+          "title": "Users, processes and services",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" }
+          ]
+        },
+        {
+          "id": "01.5",
+          "title": "First lab: guided intro rooms",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "Networking for Security",
+      "subtopics": [
+        {
+          "id": "02.1",
+          "title": "TCP/IP, ports and protocols",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" }
+          ]
+        },
+        {
+          "id": "02.2",
+          "title": "DNS and how lookups can be abused",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "02.3",
+          "title": "HTTP and what attackers see in traffic",
+          "resources": [
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "02.4",
+          "title": "WiFi basics and common attacks",
+          "resources": [
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "02.5",
+          "title": "Subnetting essentials",
+          "resources": [
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "Python for Security",
+      "subtopics": [
+        {
+          "id": "03.1",
+          "title": "Python syntax for tooling",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" }
+          ]
+        },
+        {
+          "id": "03.2",
+          "title": "Files, requests and parsing output",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "03.3",
+          "title": "Automating checks with scripts",
+          "resources": [
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "03.4",
+          "title": "Small project: log analyzer script",
+          "resources": [
+            { "name": "Python logging Docs", "url": "https://docs.python.org/3/library/logging.html" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "Security Fundamentals",
+      "subtopics": [
+        {
+          "id": "04.1",
+          "title": "CIA triad and security mindset",
+          "resources": [
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "04.2",
+          "title": "Threat modeling basics",
+          "resources": [
+            { "name": "OWASP", "url": "https://owasp.org/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "04.3",
+          "title": "OWASP Top 10 overview",
+          "resources": [
+            { "name": "OWASP Top 10", "url": "https://owasp.org/www-project-top-ten/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "04.4",
+          "title": "Social engineering awareness",
+          "resources": [
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "04.5",
+          "title": "Legal and ethical hacking rules",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "HackTheBox", "url": "https://www.hackthebox.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "Cryptography Basics",
+      "subtopics": [
+        {
+          "id": "05.1",
+          "title": "Hashing and integrity",
+          "resources": [
+            { "name": "OWASP", "url": "https://owasp.org/" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "05.2",
+          "title": "Symmetric vs asymmetric encryption",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "Khan Academy", "url": "https://www.khanacademy.org/" }
+          ]
+        },
+        {
+          "id": "05.3",
+          "title": "TLS, certificates and PKI",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "Let's Encrypt", "url": "https://letsencrypt.org/" }
+          ]
+        },
+        {
+          "id": "05.4",
+          "title": "Storing passwords safely",
+          "resources": [
+            { "name": "OWASP", "url": "https://owasp.org/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "05.5",
+          "title": "Common crypto pitfalls",
+          "resources": [
+            { "name": "OWASP", "url": "https://owasp.org/" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "Web Application Security",
+      "subtopics": [
+        {
+          "id": "06.1",
+          "title": "Cross-site scripting (XSS)",
+          "resources": [
+            { "name": "PortSwigger Web Security Academy", "url": "https://portswigger.net/web-security" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "06.2",
+          "title": "SQL injection",
+          "resources": [
+            { "name": "PortSwigger Web Security Academy", "url": "https://portswigger.net/web-security" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "06.3",
+          "title": "CSRF and broken authentication",
+          "resources": [
+            { "name": "PortSwigger Web Security Academy", "url": "https://portswigger.net/web-security" },
+            { "name": "OWASP", "url": "https://owasp.org/" }
+          ]
+        },
+        {
+          "id": "06.4",
+          "title": "Intercepting requests with Burp Suite",
+          "resources": [
+            { "name": "PortSwigger Web Security Academy", "url": "https://portswigger.net/web-security" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "06.5",
+          "title": "API security basics",
+          "resources": [
+            { "name": "OWASP", "url": "https://owasp.org/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "Network Security",
+      "subtopics": [
+        {
+          "id": "07.1",
+          "title": "Firewalls and segmentation",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" }
+          ]
+        },
+        {
+          "id": "07.2",
+          "title": "VPNs and encrypted tunnels",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "07.3",
+          "title": "Scanning with Nmap",
+          "resources": [
+            { "name": "Nmap", "url": "https://nmap.org/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "07.4",
+          "title": "Traffic analysis with Wireshark",
+          "resources": [
+            { "name": "Wireshark Docs", "url": "https://www.wireshark.org/docs/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "System Security",
+      "subtopics": [
+        {
+          "id": "08.1",
+          "title": "Windows security baselines",
+          "resources": [
+            { "name": "Microsoft Learn", "url": "https://learn.microsoft.com/" },
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" }
+          ]
+        },
+        {
+          "id": "08.2",
+          "title": "Linux hardening essentials",
+          "resources": [
+            { "name": "CIS", "url": "https://www.cisecurity.org/" },
+            { "name": "Linux Journey", "url": "https://linuxjourney.com/" }
+          ]
+        },
+        {
+          "id": "08.3",
+          "title": "Malware types and triage",
+          "resources": [
+            { "name": "VirusTotal", "url": "https://www.virustotal.com/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "08.4",
+          "title": "Endpoint protection and EDR basics",
+          "resources": [
+            { "name": "Microsoft Learn", "url": "https://learn.microsoft.com/" },
+            { "name": "VirusTotal", "url": "https://www.virustotal.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "Defensive Security",
+      "subtopics": [
+        {
+          "id": "09.1",
+          "title": "Life as a SOC analyst",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" }
+          ]
+        },
+        {
+          "id": "09.2",
+          "title": "SIEM basics with Elastic",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "Elastic", "url": "https://www.elastic.co/" }
+          ]
+        },
+        {
+          "id": "09.3",
+          "title": "Incident response lifecycle",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "NIST Cybersecurity Framework", "url": "https://www.nist.gov/cyberframework" }
+          ]
+        },
+        {
+          "id": "09.4",
+          "title": "Threat intel and IOCs",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "VirusTotal", "url": "https://www.virustotal.com/" }
+          ]
+        },
+        {
+          "id": "09.5",
+          "title": "Forensics intro: disk and memory",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "Wireshark Docs", "url": "https://www.wireshark.org/docs/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Ethical Pentesting",
+      "subtopics": [
+        {
+          "id": "10.1",
+          "title": "Methodology and rules of engagement",
+          "resources": [
+            { "name": "HackTheBox", "url": "https://www.hackthebox.com/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "10.2",
+          "title": "Reconnaissance and OSINT basics",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "HackTheBox", "url": "https://www.hackthebox.com/" }
+          ]
+        },
+        {
+          "id": "10.3",
+          "title": "Enumeration of services",
+          "resources": [
+            { "name": "Nmap", "url": "https://nmap.org/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "10.4",
+          "title": "Exploitation basics with Metasploit",
+          "resources": [
+            { "name": "Metasploit Docs", "url": "https://docs.metasploit.com/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "10.5",
+          "title": "Writing a pentest report",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Cloud and AppSec",
+      "subtopics": [
+        {
+          "id": "11.1",
+          "title": "Cloud IAM and misconfigurations",
+          "resources": [
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "11.2",
+          "title": "Secrets in code and CI",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "AWS Docs", "url": "https://docs.aws.amazon.com/" }
+          ]
+        },
+        {
+          "id": "11.3",
+          "title": "Supply chain and dependency risks",
+          "resources": [
+            { "name": "OWASP", "url": "https://owasp.org/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "11.4",
+          "title": "DevSecOps: security gates in CI",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "OWASP", "url": "https://owasp.org/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "Governance, Risk and Compliance",
+      "subtopics": [
+        {
+          "id": "12.1",
+          "title": "Risk management basics",
+          "resources": [
+            { "name": "NIST Cybersecurity Framework", "url": "https://www.nist.gov/cyberframework" },
+            { "name": "Professor Messer YouTube", "url": "https://www.youtube.com/@ProfessorMesser" }
+          ]
+        },
+        {
+          "id": "12.2",
+          "title": "Frameworks: NIST and ISO 27001",
+          "resources": [
+            { "name": "NIST Cybersecurity Framework", "url": "https://www.nist.gov/cyberframework" },
+            { "name": "ISO", "url": "https://www.iso.org/" }
+          ]
+        },
+        {
+          "id": "12.3",
+          "title": "Privacy and data protection",
+          "resources": [
+            { "name": "GDPR Info", "url": "https://gdpr-info.eu/" },
+            { "name": "OWASP", "url": "https://owasp.org/" }
+          ]
+        },
+        {
+          "id": "12.4",
+          "title": "Policies, audits and evidence",
+          "resources": [
+            { "name": "NIST Cybersecurity Framework", "url": "https://www.nist.gov/cyberframework" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Security Tooling and Labs",
+      "subtopics": [
+        {
+          "id": "13.1",
+          "title": "Burp Suite guided labs",
+          "resources": [
+            { "name": "PortSwigger Web Security Academy", "url": "https://portswigger.net/web-security" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "13.2",
+          "title": "Wireshark packet challenges",
+          "resources": [
+            { "name": "Wireshark Docs", "url": "https://www.wireshark.org/docs/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "13.3",
+          "title": "Kali Linux environment",
+          "resources": [
+            { "name": "Kali Docs", "url": "https://www.kali.org/docs/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        },
+        {
+          "id": "13.4",
+          "title": "CTF practice habit",
+          "resources": [
+            { "name": "HackTheBox", "url": "https://www.hackthebox.com/" },
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "title": "Capstone Projects and Portfolio",
+      "subtopics": [
+        {
+          "id": "14.1",
+          "title": "Home lab: vulnerable VMs and writeups",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "HackTheBox", "url": "https://www.hackthebox.com/" }
+          ]
+        },
+        {
+          "id": "14.2",
+          "title": "Web pentest report on a lab target",
+          "resources": [
+            { "name": "PortSwigger Web Security Academy", "url": "https://portswigger.net/web-security" },
+            { "name": "OWASP", "url": "https://owasp.org/" }
+          ]
+        },
+        {
+          "id": "14.3",
+          "title": "Blue team project: detect and document",
+          "resources": [
+            { "name": "TryHackMe", "url": "https://tryhackme.com/" },
+            { "name": "Elastic", "url": "https://www.elastic.co/" }
+          ]
+        },
+        {
+          "id": "14.4",
+          "title": "Portfolio and security interviews",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    }
+  ]
+}

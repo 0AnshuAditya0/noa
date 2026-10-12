@@ -1,0 +1,597 @@
+{
+  "id": "backend",
+  "name": "backend",
+  "title": "Backend",
+  "description": "Beginner-first backend path: Python and Git prerequisites, how the web works, databases, FastAPI, auth, caching, testing, Docker, CI/CD, system design basics and portfolio projects.",
+  "id_policy": "IDs are permanent, never renumber. New topics get new IDs.",
+  "topics": [
+    {
+      "id": "01",
+      "title": "Python and Git Foundations",
+      "subtopics": [
+        {
+          "id": "01.1",
+          "title": "Python refresher: functions, modules, data structures",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" }
+          ]
+        },
+        {
+          "id": "01.2",
+          "title": "Git basics: commit, branch, push, pull requests",
+          "resources": [
+            { "name": "Git Official Docs", "url": "https://git-scm.com/doc" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        },
+        {
+          "id": "01.3",
+          "title": "Linux CLI for backend developers",
+          "resources": [
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "01.4",
+          "title": "Virtualenvs and dependency management",
+          "resources": [
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        },
+        {
+          "id": "01.5",
+          "title": "Reading tracebacks and debugging APIs",
+          "resources": [
+            { "name": "CS50P Introduction to Programming with Python", "url": "https://cs50.harvard.edu/python/" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "How the Web Works",
+      "subtopics": [
+        {
+          "id": "02.1",
+          "title": "Clients, servers, DNS and IP",
+          "resources": [
+            { "name": "MDN Express Node Intro", "url": "https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "02.2",
+          "title": "HTTP: methods, status codes, headers, cookies",
+          "resources": [
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "02.3",
+          "title": "REST conventions: resources, verbs, nesting",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        },
+        {
+          "id": "02.4",
+          "title": "JSON, serialization and validation",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" }
+          ]
+        },
+        {
+          "id": "02.5",
+          "title": "HTTPS and TLS basics",
+          "resources": [
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "Databases and SQL",
+      "subtopics": [
+        {
+          "id": "03.1",
+          "title": "Relational model, keys and normalization",
+          "resources": [
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" },
+            { "name": "freeCodeCamp Relational Database", "url": "https://www.freecodecamp.org/learn/relational-database/" }
+          ]
+        },
+        {
+          "id": "03.2",
+          "title": "Core SQL: SELECT, WHERE, JOIN, GROUP BY",
+          "resources": [
+            { "name": "SQLBolt", "url": "https://sqlbolt.com/" },
+            { "name": "freeCodeCamp Relational Database", "url": "https://www.freecodecamp.org/learn/relational-database/" }
+          ]
+        },
+        {
+          "id": "03.3",
+          "title": "Indexes, transactions and isolation",
+          "resources": [
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" },
+            { "name": "SQLite Docs", "url": "https://www.sqlite.org/docs.html" }
+          ]
+        },
+        {
+          "id": "03.4",
+          "title": "ORMs and migrations in practice",
+          "resources": [
+            { "name": "Django Docs", "url": "https://docs.djangoproject.com/en/stable/" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        },
+        {
+          "id": "03.5",
+          "title": "NoSQL overview: documents and key-value stores",
+          "resources": [
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "FastAPI in Practice",
+      "subtopics": [
+        {
+          "id": "04.1",
+          "title": "First app: routes, path and query params",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "04.2",
+          "title": "Request bodies and Pydantic validation",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        },
+        {
+          "id": "04.3",
+          "title": "Dependencies and application structure",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "Django Docs", "url": "https://docs.djangoproject.com/en/stable/" }
+          ]
+        },
+        {
+          "id": "04.4",
+          "title": "Connecting a database to your API",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        },
+        {
+          "id": "04.5",
+          "title": "Error handling and response models",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "Auth and Security",
+      "subtopics": [
+        {
+          "id": "05.1",
+          "title": "Password hashing and safe storage",
+          "resources": [
+            { "name": "OWASP", "url": "https://owasp.org/" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        },
+        {
+          "id": "05.2",
+          "title": "Sessions vs JWT",
+          "resources": [
+            { "name": "JWT.io", "url": "https://jwt.io/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        },
+        {
+          "id": "05.3",
+          "title": "OAuth2 and social login basics",
+          "resources": [
+            { "name": "OAuth 2.0", "url": "https://oauth.net/2/" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        },
+        {
+          "id": "05.4",
+          "title": "OWASP Top 10 for backend developers",
+          "resources": [
+            { "name": "OWASP", "url": "https://owasp.org/" },
+            { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
+          ]
+        },
+        {
+          "id": "05.5",
+          "title": "Env secrets and least privilege",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "Caching and Background Jobs",
+      "subtopics": [
+        {
+          "id": "06.1",
+          "title": "Caching strategies: what and when to cache",
+          "resources": [
+            { "name": "Redis Docs", "url": "https://redis.io/docs/" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        },
+        {
+          "id": "06.2",
+          "title": "Redis basics: strings, hashes, expiry",
+          "resources": [
+            { "name": "Redis Docs", "url": "https://redis.io/docs/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "06.3",
+          "title": "Background tasks with Celery",
+          "resources": [
+            { "name": "Celery Docs", "url": "https://docs.celeryq.dev/" },
+            { "name": "Django Docs", "url": "https://docs.djangoproject.com/en/stable/" }
+          ]
+        },
+        {
+          "id": "06.4",
+          "title": "Scheduled jobs and retries",
+          "resources": [
+            { "name": "Celery Docs", "url": "https://docs.celeryq.dev/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "Testing and Code Quality",
+      "subtopics": [
+        {
+          "id": "07.1",
+          "title": "Unit testing with pytest",
+          "resources": [
+            { "name": "Pytest Docs", "url": "https://docs.pytest.org/en/stable/" },
+            { "name": "freeCodeCamp Quality Assurance", "url": "https://www.freecodecamp.org/learn/quality-assurance/" }
+          ]
+        },
+        {
+          "id": "07.2",
+          "title": "Testing APIs: TestClient and fixtures",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "freeCodeCamp Quality Assurance", "url": "https://www.freecodecamp.org/learn/quality-assurance/" }
+          ]
+        },
+        {
+          "id": "07.3",
+          "title": "Type checking Python with typing",
+          "resources": [
+            { "name": "Python typing Docs", "url": "https://docs.python.org/3/library/typing.html" },
+            { "name": "Python Official Tutorial", "url": "https://docs.python.org/3/tutorial/" }
+          ]
+        },
+        {
+          "id": "07.4",
+          "title": "Linting, formatting and pre-commit",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "Docker and Containers",
+      "subtopics": [
+        {
+          "id": "08.1",
+          "title": "Images vs containers, Dockerfile basics",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "08.2",
+          "title": "Multi-stage builds and layer caching",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        },
+        {
+          "id": "08.3",
+          "title": "Compose: API plus database locally",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        },
+        {
+          "id": "08.4",
+          "title": "Registries and image tagging",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "CI-CD and Deployment",
+      "subtopics": [
+        {
+          "id": "09.1",
+          "title": "GitHub Actions: test on every push",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        },
+        {
+          "id": "09.2",
+          "title": "Environments, secrets and 12-factor config",
+          "resources": [
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        },
+        {
+          "id": "09.3",
+          "title": "Deploying a containerized API",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        },
+        {
+          "id": "09.4",
+          "title": "Zero-downtime basics: health checks and rollbacks",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        },
+        {
+          "id": "09.5",
+          "title": "Logs that help you debug production",
+          "resources": [
+            { "name": "Python logging Docs", "url": "https://docs.python.org/3/library/logging.html" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "System Design Basics",
+      "subtopics": [
+        {
+          "id": "10.1",
+          "title": "Scaling: vertical vs horizontal, load balancers",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        },
+        {
+          "id": "10.2",
+          "title": "Database scaling: replication and sharding",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" }
+          ]
+        },
+        {
+          "id": "10.3",
+          "title": "CAP theorem and consistency tradeoffs",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        },
+        {
+          "id": "10.4",
+          "title": "Design TinyURL end to end",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "ByteByteGo YouTube", "url": "https://www.youtube.com/@ByteByteGo" }
+          ]
+        },
+        {
+          "id": "10.5",
+          "title": "Design a rate limiter",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "Redis Docs", "url": "https://redis.io/docs/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Messaging and Realtime",
+      "subtopics": [
+        {
+          "id": "11.1",
+          "title": "Message queues: when and why",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "11.2",
+          "title": "WebSockets for live updates",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        },
+        {
+          "id": "11.3",
+          "title": "Polling vs SSE vs WebSockets",
+          "resources": [
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "11.4",
+          "title": "Idempotency keys and safe retries",
+          "resources": [
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "Observability and Reliability",
+      "subtopics": [
+        {
+          "id": "12.1",
+          "title": "Structured logging that scales",
+          "resources": [
+            { "name": "Python logging Docs", "url": "https://docs.python.org/3/library/logging.html" },
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" }
+          ]
+        },
+        {
+          "id": "12.2",
+          "title": "Metrics and alerting basics",
+          "resources": [
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        },
+        {
+          "id": "12.3",
+          "title": "Backups and disaster recovery",
+          "resources": [
+            { "name": "PostgreSQL Docs", "url": "https://www.postgresql.org/docs/" },
+            { "name": "SQLite Docs", "url": "https://www.sqlite.org/docs.html" }
+          ]
+        },
+        {
+          "id": "12.4",
+          "title": "Incident habits: runbooks and postmortems",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Advanced APIs",
+      "subtopics": [
+        {
+          "id": "13.1",
+          "title": "Pagination, filtering and versioning",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        },
+        {
+          "id": "13.2",
+          "title": "GraphQL essentials",
+          "resources": [
+            { "name": "GraphQL", "url": "https://graphql.org/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
+          ]
+        },
+        {
+          "id": "13.3",
+          "title": "OpenAPI docs and client generation",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "Swagger", "url": "https://swagger.io/" }
+          ]
+        },
+        {
+          "id": "13.4",
+          "title": "File uploads and large payloads",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "Django Docs", "url": "https://docs.djangoproject.com/en/stable/" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "title": "Projects and Portfolio",
+      "subtopics": [
+        {
+          "id": "14.1",
+          "title": "REST API with DB, auth and tests",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "freeCodeCamp Full Stack Developer", "url": "https://www.freecodecamp.org/learn/full-stack-developer/" }
+          ]
+        },
+        {
+          "id": "14.2",
+          "title": "Realtime feature: chat or live dashboard",
+          "resources": [
+            { "name": "FastAPI Docs", "url": "https://fastapi.tiangolo.com/" },
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
+          ]
+        },
+        {
+          "id": "14.3",
+          "title": "Ship it: Docker, CI and hosted demo",
+          "resources": [
+            { "name": "Docker Docs", "url": "https://docs.docker.com/" },
+            { "name": "GitHub Actions Docs", "url": "https://docs.github.com/en/actions" }
+          ]
+        },
+        {
+          "id": "14.4",
+          "title": "Portfolio: READMEs, demos and backend interviews",
+          "resources": [
+            { "name": "GitHub Docs", "url": "https://docs.github.com/en" },
+            { "name": "GitHub Skills", "url": "https://skills.github.com/" }
+          ]
+        }
+      ]
+    }
+  ]
+}

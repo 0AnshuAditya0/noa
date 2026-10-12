@@ -344,7 +344,7 @@
           "title": "Processes, threads and concurrency",
           "resources": [
             { "name": "OSTEP Free Book", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
-            { "name": "MIT 6.S081 Operating System Engineering", "url": "https://ocw.mit.edu/courses/6-081-operating-system-engineering-fall-2021/" }
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" }
           ]
         },
         {
@@ -352,7 +352,7 @@
           "title": "CPU scheduling and synchronization (locks, semaphores)",
           "resources": [
             { "name": "OSTEP Free Book", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
-            { "name": "MIT 6.S081 Operating System Engineering", "url": "https://ocw.mit.edu/courses/6-081-operating-system-engineering-fall-2021/" }
+            { "name": "Python Threading Docs", "url": "https://docs.python.org/3/library/threading.html" }
           ]
         },
         {
@@ -368,7 +368,7 @@
           "title": "File systems and storage",
           "resources": [
             { "name": "OSTEP Free Book", "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/" },
-            { "name": "MIT 6.S081 Operating System Engineering", "url": "https://ocw.mit.edu/courses/6-081-operating-system-engineering-fall-2021/" }
+            { "name": "SQLite Docs", "url": "https://www.sqlite.org/docs.html" }
           ]
         },
         {
@@ -389,7 +389,7 @@
           "id": "09.1",
           "title": "OSI and TCP/IP models, IP, subnets, DNS",
           "resources": [
-            { "name": "freeCodeCamp Computer Networking Course", "url": "https://www.freecodecamp.org/news/computer-networking-course/" },
+            { "name": "Roadmap.sh", "url": "https://roadmap.sh/" },
             { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" }
           ]
         },
@@ -398,7 +398,7 @@
           "title": "TCP vs UDP, ports, three-way handshake",
           "resources": [
             { "name": "Cloudflare Learning Center", "url": "https://www.cloudflare.com/learning/" },
-            { "name": "freeCodeCamp Computer Networking Course", "url": "https://www.freecodecamp.org/news/computer-networking-course/" }
+            { "name": "MDN HTTP Guide", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP" }
           ]
         },
         {

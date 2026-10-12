@@ -5,6 +5,7 @@ import db
 import roadmaps
 
 BAR_LEN = 12
+BROWSER_TIMEOUT = 180
 
 
 def _bar(pct: float, length: int = BAR_LEN) -> str:
@@ -34,6 +35,228 @@ def _resolve_single_path(paths: dict, name: str | None, user_id: int | None = No
     return None
 
 
+def _topic_page_embed(path_id: str, data: dict, index: int, user_id: int) -> discord.Embed:
+    """Build the one-topic embed, loading fresh progress each render."""
+    topics = data.get("topics", [])
+    index = max(0, min(index, len(topics) - 1))
+    topic = topics[index]
+    done = db.get_done_ids(user_id, path_id)
+    subs = topic.get("subtopics", [])
+    done_n = sum(1 for s in subs if str(s.get("id")) in done)
+    embed = discord.Embed(
+        title=f"{topic.get('id')} — {topic.get('title')}",
+        color=discord.Color.blurple(),
+    )
+    lines: list[str] = []
+    for sub in subs:
+        sid = str(sub.get("id"))
+        mark = "✅" if sid in done else "⬜"
+        line = f"{mark} `{sid}` **{sub.get('title', '')}**"
+        resources = sub.get("resources", [])[:3]
+        if resources:
+            links = " · ".join(f"[{r.get('name', 'link')[:40]}]({r.get('url')})" for r in resources if r.get("url"))
+            if links:
+                line += f"\n└ {links}"
+        lines.append(line)
+    embed.description = "\n".join(lines)[:4000] or "No subtopics."
+    total = roadmaps.total_count(data)
+    overall_n = len(done)
+    pct = round(overall_n / total * 100) if total else 0
+    current, _ = db.get_streaks(user_id)
+    embed.set_footer(
+        text=f"Topic {index + 1}/{len(topics)} · {done_n}/{len(subs)} · Overall {_bar(pct)} {pct}% ({overall_n}/{total}) · 🔥 {current}"
+    )
+    return embed
+
+
+class _OwnerView(discord.ui.View):
+    def __init__(self, owner_id: int, prefix: str, timeout: float = BROWSER_TIMEOUT) -> None:
+        super().__init__(timeout=timeout)
+        self.owner_id = owner_id
+        self.prefix = prefix
+        self.message: discord.Message | None = None
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        if interaction.user.id != self.owner_id:
+            try:
+                await interaction.response.send_message("This isn't your menu.", ephemeral=True)
+            except discord.HTTPException:
+                pass
+            return False
+        return True
+
+    async def on_timeout(self) -> None:
+        for child in self.children:
+            child.disabled = True
+        if self.message is not None:
+            try:
+                await self.message.edit(view=self)
+            except discord.HTTPException:
+                pass
+
+
+async def _show_browser_page(
+    interaction: discord.Interaction, owner_id: int, prefix: str, path_id: str, index: int
+) -> None:
+    """Re-render one topic page from fresh JSON (handles JSON changing mid-session)."""
+    paths = roadmaps.load_roadmaps()
+    data = paths.get(path_id)
+    if data is None:
+        await interaction.response.edit_message(
+            content=f"That path is no longer available. Use `{prefix}paths`.", embed=None, view=None
+        )
+        return
+    topics = data.get("topics", [])
+    if not topics:
+        await interaction.response.edit_message(content="That path has no topics.", embed=None, view=None)
+        return
+    index = max(0, min(index, len(topics) - 1))
+    embed = _topic_page_embed(path_id, data, index, owner_id)
+    view = PathBrowserView(owner_id, prefix, path_id, index)
+    await interaction.response.edit_message(content=None, embed=embed, view=view)
+    view.message = interaction.message
+
+
+class TopicJumpSelect(discord.ui.Select):
+    def __init__(self, owner_id: int, prefix: str, path_id: str, topics: list[dict]) -> None:
+        self._owner_id = owner_id
+        self._prefix = prefix
+        self._path_id = path_id
+        options = [
+            discord.SelectOption(
+                label=f"{t.get('id')} {str(t.get('title', ''))[:80]}",
+                value=str(t.get("id")),
+            )
+            for t in topics[:25]
+        ]
+        super().__init__(placeholder="Jump to a topic…", options=options)
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        paths = roadmaps.load_roadmaps()
+        topics = paths.get(self._path_id, {}).get("topics", [])
+        ids = [str(t.get("id")) for t in topics]
+        try:
+            new_index = ids.index(self.values[0])
+        except ValueError:
+            new_index = 0  # topic removed/renamed since render
+        await _show_browser_page(interaction, self._owner_id, self._prefix, self._path_id, new_index)
+
+
+class PathBrowserView(_OwnerView):
+    def __init__(self, owner_id: int, prefix: str, path_id: str, index: int) -> None:
+        super().__init__(owner_id, prefix)
+        self.path_id = path_id
+        self.index = index
+        topics = roadmaps.load_roadmaps().get(path_id, {}).get("topics", [])
+        if topics:
+            self.add_item(TopicJumpSelect(owner_id, prefix, path_id, topics))
+
+        prev_btn = discord.ui.Button(label="◀ Prev", style=discord.ButtonStyle.secondary, disabled=index <= 0)
+        next_btn = discord.ui.Button(
+            label="Next ▶", style=discord.ButtonStyle.secondary, disabled=index >= len(topics) - 1
+        )
+        done_btn = discord.ui.Button(label="✅ Mark done", style=discord.ButtonStyle.success)
+        undo_btn = discord.ui.Button(label="↩ Undo", style=discord.ButtonStyle.danger)
+
+        async def go(interaction: discord.Interaction, step: int) -> None:
+            await _show_browser_page(interaction, self.owner_id, self.prefix, self.path_id, self.index + step)
+
+        async def go_prev(interaction: discord.Interaction) -> None:
+            await go(interaction, -1)
+
+        async def go_next(interaction: discord.Interaction) -> None:
+            await go(interaction, 1)
+
+        async def open_done(interaction: discord.Interaction) -> None:
+            paths = roadmaps.load_roadmaps()
+            topics = paths.get(self.path_id, {}).get("topics", [])
+            if not topics:
+                await interaction.response.send_message("That path has no topics.", ephemeral=True)
+                return
+            idx = max(0, min(self.index, len(topics) - 1))
+            done = db.get_done_ids(self.owner_id, self.path_id)
+            pending = [s for s in topics[idx].get("subtopics", []) if str(s.get("id")) not in done]
+            if not pending:
+                await interaction.response.send_message("Everything on this page is already done. ✅", ephemeral=True)
+                return
+            view = MarkSelectView(self.owner_id, self.prefix, self.path_id, idx, pending, do_mark=True)
+            embed = discord.Embed(
+                title="Select items to mark done",
+                description=f"Topic `{topics[idx].get('id')}` — you can pick several.",
+                color=discord.Color.green(),
+            )
+            await interaction.response.edit_message(embed=embed, view=view)
+            view.message = interaction.message
+
+        async def open_undo(interaction: discord.Interaction) -> None:
+            paths = roadmaps.load_roadmaps()
+            topics = paths.get(self.path_id, {}).get("topics", [])
+            if not topics:
+                await interaction.response.send_message("That path has no topics.", ephemeral=True)
+                return
+            idx = max(0, min(self.index, len(topics) - 1))
+            done = db.get_done_ids(self.owner_id, self.path_id)
+            finished = [s for s in topics[idx].get("subtopics", []) if str(s.get("id")) in done]
+            if not finished:
+                await interaction.response.send_message("Nothing on this page is marked done yet.", ephemeral=True)
+                return
+            view = MarkSelectView(self.owner_id, self.prefix, self.path_id, idx, finished, do_mark=False)
+            embed = discord.Embed(
+                title="Select items to unmark",
+                description=f"Topic `{topics[idx].get('id')}` — you can pick several.",
+                color=discord.Color.orange(),
+            )
+            await interaction.response.edit_message(embed=embed, view=view)
+            view.message = interaction.message
+
+        prev_btn.callback = go_prev
+        next_btn.callback = go_next
+        done_btn.callback = open_done
+        undo_btn.callback = open_undo
+        self.add_item(prev_btn)
+        self.add_item(next_btn)
+        self.add_item(done_btn)
+        self.add_item(undo_btn)
+
+
+class MarkSelectView(_OwnerView):
+    """Multi-select to mark/unmark items on one topic page, with a Back button."""
+
+    def __init__(
+        self, owner_id: int, prefix: str, path_id: str, index: int, items: list[dict], do_mark: bool
+    ) -> None:
+        super().__init__(owner_id, prefix)
+        self.path_id = path_id
+        self.index = index
+        self.do_mark = do_mark
+        select = discord.ui.Select(
+            placeholder="Pick one or more…",
+            min_values=1,
+            max_values=min(len(items), 25),
+            options=[
+                discord.SelectOption(label=f"{s.get('id')} {str(s.get('title', ''))[:80]}", value=str(s.get("id")))
+                for s in items[:25]
+            ],
+        )
+
+        async def apply(interaction: discord.Interaction) -> None:
+            # Idempotent: double-clicks / retries can't create dupes (INSERT OR IGNORE).
+            if self.do_mark:
+                db.mark_many(self.owner_id, self.path_id, list(select.values))
+            else:
+                db.unmark_many(self.owner_id, self.path_id, list(select.values))
+            await _show_browser_page(interaction, self.owner_id, self.prefix, self.path_id, self.index)
+
+        async def back(interaction: discord.Interaction) -> None:
+            await _show_browser_page(interaction, self.owner_id, self.prefix, self.path_id, self.index)
+
+        select.callback = apply
+        back_btn = discord.ui.Button(label="◀ Back", style=discord.ButtonStyle.secondary)
+        back_btn.callback = back
+        self.add_item(select)
+        self.add_item(back_btn)
+
+
 class Roadmap(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -61,33 +284,21 @@ class Roadmap(commands.Cog):
 
     @commands.command(name="path")
     async def path(self, ctx: commands.Context, *, name: str | None = None) -> None:
-        """Show topics in a path. Defaults to your active path."""
+        """Interactive topic browser. Defaults to your active path."""
         paths = roadmaps.load_roadmaps()
         resolved = _resolve_single_path(paths, name, ctx.author.id)
         if resolved is None:
             await ctx.send(f"Path not found. Use `{ctx.prefix}paths` to list them.")
             return
         pid, data = resolved
-        done = db.get_done_ids(ctx.author.id, pid)
-        embed = discord.Embed(
-            title=str(data.get("title", pid)),
-            description=str(data.get("description", ""))[:400],
-            color=discord.Color.blurple(),
-        )
-        lines: list[str] = []
-        for topic in data.get("topics", []):
-            subs = topic.get("subtopics", [])
-            done_n = sum(1 for s in subs if str(s["id"]) in done)
-            mark = "✅" if subs and done_n == len(subs) else f"{done_n}/{len(subs)}"
-            lines.append(f"`{topic['id']}` **{topic['title']}** — {mark}")
-        chunk = "\n".join(lines)
-        if len(chunk) > 4000:
-            chunk = chunk[:4000] + "\n…"
-        embed.description = (embed.description + "\n\n" + chunk) if embed.description else chunk
-        total = roadmaps.total_count(data)
-        pct = round(len(done) / total * 100) if total else 0
-        embed.set_footer(text=f"{_bar(pct)} {pct}% ({len(done)}/{total}) · {ctx.prefix}finish <id> to track")
-        await ctx.send(embed=embed)
+        topics = data.get("topics", [])
+        if not topics:
+            await ctx.send("That path has no topics.")
+            return
+        embed = _topic_page_embed(pid, data, 0, ctx.author.id)
+        view = PathBrowserView(ctx.author.id, ctx.prefix, pid, 0)
+        msg = await ctx.send(embed=embed, view=view)
+        view.message = msg
 
     def _resolve_for_topic(self, topic_id: str, path_name: str | None, user_id: int | None = None):
         paths = roadmaps.load_roadmaps()
@@ -174,6 +385,7 @@ class Roadmap(commands.Cog):
         if not targets:
             await ctx.send("No roadmap paths found.")
             return
+        current, longest = db.get_streaks(ctx.author.id)
         embed = discord.Embed(title="Your progress", color=discord.Color.green())
         for pid, data in targets:
             total = roadmaps.total_count(data)
@@ -184,6 +396,7 @@ class Roadmap(commands.Cog):
                 value=f"`{_bar(pct)}` {pct}% ({done_n}/{total})",
                 inline=False,
             )
+        embed.set_footer(text=f"🔥 Current streak: {current}d · Longest: {longest}d")
         await ctx.send(embed=embed)
 
 

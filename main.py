@@ -31,6 +31,7 @@ class NoaBot(commands.Bot):
 def make_bot() -> NoaBot:
     intents = discord.Intents.default()
     intents.message_content = True  # required for prefix commands to read content
+    intents.members = True  # privileged: also enable "Server Members Intent" in the portal
     bot = NoaBot(command_prefix=BOT_PREFIX, intents=intents, help_command=None)
     return bot
 

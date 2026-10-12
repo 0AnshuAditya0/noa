@@ -161,6 +161,35 @@ class GoalView(_OwnerView):
         return btn
 
 
+class SwitchPathSelect(discord.ui.Select):
+    def __init__(self, paths: dict, owner_id: int, prefix: str) -> None:
+        self._owner_id = owner_id
+        self._prefix = prefix
+        options = []
+        for pid, data in list(paths.items())[:25]:
+            label = str(data.get("title", pid))[:100] or pid
+            desc = str(data.get("description", ""))[:100] or None
+            options.append(discord.SelectOption(label=label, value=pid, description=desc))
+        super().__init__(placeholder="Choose your new active path…", options=options)
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        db.update_user(self._owner_id, active_path=self.values[0])
+        paths = roadmaps.load_roadmaps()
+        title = paths.get(self.values[0], {}).get("title", self.values[0])
+        embed = discord.Embed(
+            title="Path switched",
+            description=f"Active path is now **{title}** (`{self.values[0]}`). Your progress on other paths is kept.",
+            color=discord.Color.green(),
+        )
+        await interaction.response.edit_message(embed=embed, view=None)
+
+
+class SwitchPathView(_OwnerView):
+    def __init__(self, owner_id: int, paths: dict, prefix: str) -> None:
+        super().__init__(owner_id, prefix)
+        self.add_item(SwitchPathSelect(paths, owner_id, prefix))
+
+
 class Account(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -186,6 +215,22 @@ class Account(commands.Cog):
         state: dict = {}
         view = PathView(ctx.author.id, paths, state, ctx.prefix)
         embed = _step_embed("Step 1/4", "Pick a learning path", "Select the path you want to follow.")
+        msg = await ctx.send(embed=embed, view=view)
+        view.message = msg
+
+    @commands.command(name="switchpath")
+    async def switchpath(self, ctx: commands.Context) -> None:
+        """Change your active path. Progress on other paths is kept."""
+        paths = roadmaps.load_roadmaps()
+        if not paths:
+            await ctx.send("No learning paths available yet.")
+            return
+        view = SwitchPathView(ctx.author.id, paths, ctx.prefix)
+        embed = discord.Embed(
+            title="Switch path",
+            description="Pick your new active path. Nothing is deleted.",
+            color=discord.Color.blurple(),
+        )
         msg = await ctx.send(embed=embed, view=view)
         view.message = msg
 
