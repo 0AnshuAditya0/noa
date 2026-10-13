@@ -1,10 +1,27 @@
+import re
+
 import discord
 from discord.ext import commands
 
 import db
+import policy
 import roadmaps
 
 TIMEOUT = 120
+
+BIO_MAX = 150
+_MENTION_RE = re.compile(r"<[@#][&!]?[0-9]+>")
+_URL_RE = re.compile(r"https?://\S+")
+_MASS_MENTION_RE = re.compile(r"@(everyone|here)", re.IGNORECASE)
+
+
+def sanitize_bio(text: str) -> str:
+    """Strip mentions, links and mass pings; collapse whitespace; cap length."""
+    clean = _MENTION_RE.sub("", text or "")
+    clean = _URL_RE.sub("", clean)
+    clean = _MASS_MENTION_RE.sub("", clean)
+    clean = re.sub(r"\s+", " ", clean).strip()
+    return clean[:BIO_MAX]
 
 EXPERIENCE_OPTIONS = ["Beginner", "Intermediate", "Advanced"]
 HOURS_OPTIONS = ["<5", "5-10", "10-20", "20+"]
@@ -190,6 +207,45 @@ class SwitchPathView(_OwnerView):
         self.add_item(SwitchPathSelect(paths, owner_id, prefix))
 
 
+def _start_onboarding(owner_id: int, prefix: str):
+    """Build the first onboarding step. Returns (embed, view)."""
+    paths = roadmaps.load_roadmaps()
+    state: dict = {}
+    view = PathView(owner_id, paths, state, prefix)
+    embed = _step_embed("Step 1/4", "Pick a learning path", "Select the path you want to follow.")
+    return embed, view
+
+
+class ConsentView(_OwnerView):
+    """Agree/Decline for the privacy policy. Agree continues to onboarding."""
+
+    @discord.ui.button(label="I agree", style=discord.ButtonStyle.success)
+    async def agree(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        user = interaction.user
+        if not policy.meets_min_age(user.created_at, policy.MIN_ACCOUNT_AGE_DAYS):
+            await interaction.response.edit_message(
+                content=(
+                    f"Your Discord account is too new — it must be at least "
+                    f"{policy.MIN_ACCOUNT_AGE_DAYS} days old to join. Try again later."
+                ),
+                embed=None,
+                view=None,
+            )
+            return
+        db.set_consent(user.id, policy.POLICY_VERSION, username=str(user))
+        embed, view = _start_onboarding(user.id, self.prefix)
+        await interaction.response.edit_message(content=None, embed=embed, view=view)
+        view.message = interaction.message
+
+    @discord.ui.button(label="Decline", style=discord.ButtonStyle.secondary)
+    async def decline(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+        await interaction.response.edit_message(
+            content=f"No worries — nothing was stored. Run `{self.prefix}register` again anytime.",
+            embed=None,
+            view=None,
+        )
+
+
 class Account(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -212,11 +268,44 @@ class Account(commands.Cog):
         if not paths:
             await ctx.send("No learning paths available yet. Try again later.")
             return
-        state: dict = {}
-        view = PathView(ctx.author.id, paths, state, ctx.prefix)
-        embed = _step_embed("Step 1/4", "Pick a learning path", "Select the path you want to follow.")
-        msg = await ctx.send(embed=embed, view=view)
+        view = ConsentView(ctx.author.id, ctx.prefix)
+        msg = await ctx.send(embed=policy.build_consent_embed(ctx.prefix), view=view)
         view.message = msg
+
+    @commands.command(name="agree")
+    async def agree(self, ctx: commands.Context) -> None:
+        """Accept the current privacy policy."""
+        user = db.get_user(ctx.author.id)
+        if user is None:
+            await ctx.send(f"You need an account first. Run `{ctx.prefix}register`.")
+            return
+        if user.get("consent_version") == policy.POLICY_VERSION:
+            await ctx.send("You're all set — you've already accepted the current policy.")
+            return
+        view = ConsentView(ctx.author.id, ctx.prefix)
+        msg = await ctx.send(embed=policy.build_consent_embed(ctx.prefix), view=view)
+        view.message = msg
+
+    @commands.command(name="bio")
+    async def bio(self, ctx: commands.Context, *, text: str | None = None) -> None:
+        """Set your profile bio (max 150 chars). `>bio clear` removes it."""
+        if text is None:
+            current = (db.get_user(ctx.author.id) or {}).get("bio")
+            if current:
+                await ctx.send(f"Your bio: {current}")
+            else:
+                await ctx.send(f"No bio set. Use `{ctx.prefix}bio <text>` (max 150 chars).")
+            return
+        if text.strip().lower() == "clear":
+            db.update_user(ctx.author.id, bio=None)
+            await ctx.send("Bio cleared.")
+            return
+        clean = sanitize_bio(text)
+        if not clean:
+            await ctx.send("That bio is empty once mentions and links are removed.")
+            return
+        db.update_user(ctx.author.id, bio=clean)
+        await ctx.send(f"Bio saved: {clean}")
 
     @commands.command(name="switchpath")
     async def switchpath(self, ctx: commands.Context) -> None:

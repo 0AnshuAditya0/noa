@@ -9,6 +9,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 import db
+import policy
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN") or os.getenv("TOKEN")
@@ -48,6 +49,10 @@ class UnregisteredError(commands.CheckFailure):
     """Raised by the registration gate; the error handler turns it into an embed."""
 
 
+class NeedsConsentError(commands.CheckFailure):
+    """Raised when a registered user must (re-)accept the privacy policy."""
+
+
 class NoaBot(commands.Bot):
     async def setup_hook(self) -> None:
         # Auto-load every cog in cogs/*.py (discord.py 2.x async pattern)
@@ -73,19 +78,30 @@ bot = make_bot()
 
 @bot.check
 async def registration_gate(ctx: commands.Context) -> bool:
-    """Unregistered users may only use 'register' and 'help'."""
+    """Unregistered users may only use register/help/ping/about.
+
+    Registered users on an old (or missing) policy version may only use
+    help/privacy/agree until they re-consent.
+    """
     if ctx.author.bot:
         return False
     if ctx.command is None:  # unknown command; let on_command_error ignore it
         return True
-    if ctx.command.name in ("register", "help"):
+    if ctx.command.name in ("register", "help", "ping", "about"):
         return True
     try:
-        if db.is_registered(ctx.author.id):
-            return True
+        user = db.get_user(ctx.author.id)
     except Exception:
         return True  # fail open so a DB hiccup can't lock everyone out
-    raise UnregisteredError()
+    if user is None:
+        raise UnregisteredError()
+    names = {ctx.command.name}
+    parent = getattr(ctx.command, "parent", None)
+    if parent is not None:
+        names.add(parent.name)
+    if user.get("consent_version") != policy.POLICY_VERSION and not names & {"help", "privacy", "agree"}:
+        raise NeedsConsentError()
+    return True
 
 
 @bot.event
@@ -96,6 +112,20 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError) 
         embed = discord.Embed(
             title="Account required",
             description=f"You need an account first. Run `{ctx.prefix}register`.",
+            color=discord.Color.orange(),
+        )
+        try:
+            await ctx.send(embed=embed)
+        except discord.HTTPException:
+            pass
+        return
+    if isinstance(error, NeedsConsentError):
+        embed = discord.Embed(
+            title="One more step",
+            description=(
+                "Noa's privacy policy changed. Please review and accept it first — "
+                f"run `{ctx.prefix}agree`."
+            ),
             color=discord.Color.orange(),
         )
         try:

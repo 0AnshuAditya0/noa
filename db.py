@@ -186,6 +186,16 @@ def init_db() -> None:
         conn.execute("CREATE INDEX IF NOT EXISTS idx_snap_user_date ON stats_snapshots (user_id, date)")
         conn.execute(
             """
+            CREATE TABLE IF NOT EXISTS guild_settings (
+                guild_id INTEGER PRIMARY KEY,
+                announce_channel_id INTEGER,
+                last_announced_week TEXT,
+                announce_failures INTEGER NOT NULL DEFAULT 0
+            )
+            """
+        )
+        conn.execute(
+            """
             CREATE TABLE IF NOT EXISTS dsa_learned (
                 user_id INTEGER NOT NULL,
                 entry_id TEXT NOT NULL,
@@ -199,6 +209,21 @@ def init_db() -> None:
             conn.execute("ALTER TABLE platform_stats ADD COLUMN sync_ok INTEGER NOT NULL DEFAULT 1")
         if "last_error" not in cols:
             conn.execute("ALTER TABLE platform_stats ADD COLUMN last_error TEXT")
+        ucols = [row[1] for row in conn.execute("PRAGMA table_info(users)")]
+        if "bio" not in ucols:
+            conn.execute("ALTER TABLE users ADD COLUMN bio TEXT")
+        if "consent_version" not in ucols:
+            conn.execute("ALTER TABLE users ADD COLUMN consent_version TEXT")
+        if "consented_at" not in ucols:
+            conn.execute("ALTER TABLE users ADD COLUMN consented_at TEXT")
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS bot_meta (
+                key TEXT PRIMARY KEY,
+                value TEXT
+            )
+            """
+        )
 
 
 def get_user(user_id: int) -> dict[str, Any] | None:
@@ -239,7 +264,7 @@ def create_user(
 
 def update_user(user_id: int, **fields: Any) -> bool:
     """Update allowed user fields. Returns True if a row was changed."""
-    allowed = {"username", "active_path", "experience_level", "weekly_hours", "goal"}
+    allowed = {"username", "active_path", "experience_level", "weekly_hours", "goal", "bio"}
     updates = {k: v for k, v in fields.items() if k in allowed}
     if not updates:
         return False
@@ -1049,3 +1074,146 @@ def snapshot_platforms(user_id: int) -> list[str]:
             (user_id,),
         )
         return [row[0] for row in cur.fetchall()]
+
+
+# ---- Guild settings (announce channel + weekly podium state). Additive only.
+# No user data lives here, so delete_user_data intentionally ignores it.
+
+
+def get_guild_settings(guild_id: int) -> dict[str, Any] | None:
+    init_db()
+    with _connect() as conn:
+        conn.row_factory = sqlite3.Row
+        cur = conn.execute("SELECT * FROM guild_settings WHERE guild_id = ?", (guild_id,))
+        row = cur.fetchone()
+        return dict(row) if row else None
+
+
+def list_guild_settings() -> list[dict[str, Any]]:
+    init_db()
+    with _connect() as conn:
+        conn.row_factory = sqlite3.Row
+        cur = conn.execute("SELECT * FROM guild_settings WHERE announce_channel_id IS NOT NULL")
+        return [dict(row) for row in cur.fetchall()]
+
+
+def set_announce_channel(guild_id: int, channel_id: int) -> None:
+    init_db()
+    with _connect() as conn:
+        conn.execute(
+            """
+            INSERT INTO guild_settings (guild_id, announce_channel_id, last_announced_week, announce_failures)
+            VALUES (?, ?, NULL, 0)
+            ON CONFLICT(guild_id) DO UPDATE SET announce_channel_id = excluded.announce_channel_id,
+                                                announce_failures = 0
+            """,
+            (guild_id, channel_id),
+        )
+
+
+def clear_announce_channel(guild_id: int) -> bool:
+    init_db()
+    with _connect() as conn:
+        cur = conn.execute(
+            "UPDATE guild_settings SET announce_channel_id = NULL, announce_failures = 0 "
+            "WHERE guild_id = ? AND announce_channel_id IS NOT NULL",
+            (guild_id,),
+        )
+        return cur.rowcount > 0
+
+
+def mark_week_announced(guild_id: int, week_label: str) -> None:
+    """Record a posted week. Only called after a successful send."""
+    init_db()
+    with _connect() as conn:
+        conn.execute(
+            """
+            INSERT INTO guild_settings (guild_id, announce_channel_id, last_announced_week, announce_failures)
+            VALUES (?, NULL, ?, 0)
+            ON CONFLICT(guild_id) DO UPDATE SET last_announced_week = excluded.last_announced_week,
+                                                announce_failures = 0
+            """,
+            (guild_id, week_label),
+        )
+
+
+def record_announce_failure(guild_id: int) -> int:
+    """Count a failed post. Returns the consecutive failure count."""
+    init_db()
+    with _connect() as conn:
+        conn.execute(
+            "UPDATE guild_settings SET announce_failures = announce_failures + 1 WHERE guild_id = ?",
+            (guild_id,),
+        )
+        cur = conn.execute("SELECT announce_failures FROM guild_settings WHERE guild_id = ?", (guild_id,))
+        row = cur.fetchone()
+        return row[0] if row else 0
+
+
+def set_consent(user_id: int, version: str, username: str = "") -> None:
+    """Record privacy consent, creating a minimal user row if needed."""
+    init_db()
+    with _connect() as conn:
+        conn.execute(
+            """
+            INSERT INTO users (user_id, username, registered_at, consent_version, consented_at)
+            VALUES (?, ?, ?, ?, ?)
+            ON CONFLICT(user_id) DO UPDATE SET consent_version = excluded.consent_version,
+                                               consented_at = excluded.consented_at
+            """,
+            (user_id, username, _now(), version, _now()),
+        )
+
+
+def get_consent(user_id: int) -> tuple[str | None, str | None]:
+    """Return (consent_version, consented_at) for a user, or (None, None)."""
+    user = get_user(user_id)
+    if user is None:
+        return None, None
+    return user.get("consent_version"), user.get("consented_at")
+
+
+def needs_consent(user_id: int, policy_version: str) -> bool:
+    """True when the user never consented or consented to an older policy."""
+    version, _ = get_consent(user_id)
+    return version != policy_version
+
+
+def export_user_data(user_id: int) -> dict[str, Any]:
+    """Everything stored for one user, keyed by table. Never anyone else's rows."""
+    init_db()
+    out: dict[str, Any] = {}
+    with _connect() as conn:
+        conn.row_factory = sqlite3.Row
+        tables = [
+            row[0] for row in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'"
+            )
+        ]
+        for table in tables:
+            cols = [row[1] for row in conn.execute(f"PRAGMA table_info({table})")]
+            if "user_id" not in cols:
+                continue
+            out[table] = [
+                dict(row)
+                for row in conn.execute(f"SELECT * FROM {table} WHERE user_id = ?", (user_id,))
+            ]
+    return out
+
+
+def get_meta(key: str) -> str | None:
+    init_db()
+    with _connect() as conn:
+        cur = conn.execute("SELECT value FROM bot_meta WHERE key = ?", (key,))
+        row = cur.fetchone()
+        return row[0] if row else None
+
+
+def set_meta(key: str, value: str) -> None:
+    init_db()
+    with _connect() as conn:
+        conn.execute(
+            "INSERT INTO bot_meta (key, value) VALUES (?, ?) "
+            "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+            (key, value),
+        )

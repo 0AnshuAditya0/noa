@@ -25,6 +25,10 @@ Python 3.12+ recommended (uses `zoneinfo` + `tzdata`).
 | `NOA_DB_PATH`   | no       | `data/noa.db` | SQLite file. Point it at a temp file for tests. |
 | `OWNER_ID`      | no       | —             | Your Discord user ID. Enables `>admin` commands.|
 | `LOG_LEVEL`     | no       | `INFO`        | `DEBUG`, `INFO`, `WARNING`, `ERROR`.            |
+| `REPO_URL`      | no       | —             | Link shown in `>about`. Leave empty to hide it. |
+| `CONTACT`       | no       | —             | Contact shown in the privacy policy and consent.|
+| `PRIVACY_URL`   | no       | —             | Link to the full privacy policy, if you have one.|
+| `MIN_ACCOUNT_AGE_DAYS` | no | `0`          | Minimum Discord account age to register (`0` = off).|
 
 Also enable the **Message Content** and **Server Members** privileged intents
 for the application in the Discord Developer Portal, or login will fail.
@@ -65,3 +69,13 @@ with db.temp_db():
 
 `db.temp_db()` (and the `NOA_TESTING` flag it sets) guarantees test code can
 never touch the real `data/noa.db`.
+
+## Notable commands
+
+- `>bio <text>` — set a 150-char profile bio (mentions and links are stripped); `>bio clear` removes it.
+- `>ping` — heartbeat, API round-trip and database latency in one embed.
+- `>about` — version, uptime, servers, users, and repo link.
+- `>help [topic]` — category overview, or details/examples for one category or command.
+- `>register` / `>agree` — privacy consent comes first; declining stores nothing.
+- `>privacy` — what Noa stores, your consent version, plus `>export` (JSON copy, hourly cooldown) and `>deleteme`.
+- `>admin stats|sync|announce-now` — owner only, hidden from `>help`.

@@ -130,6 +130,11 @@ def _spark(values: list[int]) -> str:
 
 
 def _badges(total: int, clong: int, week_rank: int | None) -> str:
+    joined = " · ".join(_badge_list(total, clong, week_rank))
+    return joined if joined else "No badges yet — solve to earn!"
+
+
+def _badge_list(total: int, clong: int, week_rank: int | None) -> list[str]:
     badges: list[str] = []
     if clong >= 100:
         badges.append("🔥 Century Streak (100d)")
@@ -145,7 +150,26 @@ def _badges(total: int, clong: int, week_rank: int | None) -> str:
         badges.append("💯 100 Solved")
     if week_rank is not None and week_rank <= 3:
         badges.append("🥉 Top 3 This Week")
-    return " · ".join(badges) if badges else "No badges yet — solve to earn!"
+    return badges
+
+
+def progress_bar(done: int, total: int, width: int = 10) -> str:
+    """Reusable mini bar, e.g. progress_bar(3, 4) -> '███████░░░'."""
+    if total <= 0:
+        return "░" * width
+    filled = min(width, max(0, round(done / total * width)))
+    return "█" * filled + "░" * (width - filled)
+
+
+def tier_color(week_rank: int | None) -> discord.Color:
+    """Gold for top 3, silver for top 10, blue otherwise, grey when unranked."""
+    if week_rank is None:
+        return discord.Color.dark_grey()
+    if week_rank <= 3:
+        return discord.Color.gold()
+    if week_rank <= 10:
+        return discord.Color.light_grey()
+    return discord.Color.blurple()
 
 
 class Profile(commands.Cog):
@@ -164,7 +188,8 @@ class Profile(commands.Cog):
         if db.get_user(target.id) is None:
             await ctx.send(f"{target.display_name} isn't registered yet.")
             return
-        view = ProfileView(ctx.author.id, ctx.prefix, ctx.guild, target.id, target.display_name)
+        view = ProfileView(ctx.author.id, ctx.prefix, ctx.guild, target.id, target.display_name,
+                           avatar_url=target.display_avatar.url)
         msg = await ctx.send(embed=view.render(), view=view)
         view.message = msg
 
@@ -289,7 +314,8 @@ class ProfileView(discord.ui.View):
     TAB_LABELS = {"overview": "Overview", "platforms": "Platforms", "roadmap": "Roadmap", "dsa": "DSA"}
 
     def __init__(self, owner_id: int, prefix: str, guild: discord.Guild | None,
-                 target_id: int, display_name: str, tab: str = "overview") -> None:
+                 target_id: int, display_name: str, tab: str = "overview",
+                 avatar_url: str | None = None) -> None:
         super().__init__(timeout=BOARD_TIMEOUT)
         self.owner_id = owner_id
         self.prefix = prefix
@@ -297,6 +323,7 @@ class ProfileView(discord.ui.View):
         self.target_id = target_id
         self.display_name = display_name
         self.tab = tab if tab in self.TABS else "overview"
+        self.avatar_url = avatar_url
         self.message: discord.Message | None = None
         for key in self.TABS:
             btn = discord.ui.Button(
@@ -309,7 +336,8 @@ class ProfileView(discord.ui.View):
     def _make_tab_cb(self, key: str):
         async def go(interaction: discord.Interaction) -> None:
             view = ProfileView(self.owner_id, self.prefix, self.guild,
-                               self.target_id, self.display_name, key)
+                               self.target_id, self.display_name, key,
+                               avatar_url=self.avatar_url)
             await interaction.response.edit_message(embed=view.render(), view=view)
             view.message = interaction.message
         return go
@@ -337,27 +365,43 @@ class ProfileView(discord.ui.View):
         user = d["user"]
         embed = discord.Embed(
             title=f"{self.display_name}'s profile — {self.TAB_LABELS[self.tab]}",
-            color=discord.Color.blurple(),
+            color=tier_color(d["week_rank"]),
         )
+        if self.avatar_url:
+            embed.set_thumbnail(url=self.avatar_url)
         if self.tab == "overview":
             rank = f"#{d['week_rank']} this week" if d["week_rank"] else "unranked"
+            embed.description = f"**{self.display_name}**\n{user.get('bio') or 'No bio yet.'}"
             embed.add_field(
                 name="This week",
-                value=f"{d['week_solved']} solved · rank {rank}",
+                value=f"{rank} · {d['week_solved']} solved",
                 inline=False,
             )
-            embed.add_field(name="All-time solved", value=str(d["totals"]["total"]), inline=True)
-            embed.add_field(name="Coding streak", value=f"🔥 {d['ccur']}d (longest {d['clong']}d)", inline=True)
+            embed.add_field(
+                name="Coding streak",
+                value=f"🔥 {d['ccur']}d (longest {d['clong']}d)",
+                inline=False,
+            )
             embed.add_field(
                 name="Roadmap",
-                value=f"{d['path_title']} — `{_bar(d['pct'])}` {d['pct']}% ({d['done_n']}/{d['total']})",
+                value=f"{progress_bar(d['done_n'], d['total'])} {d['pct']}% ({d['done_n']}/{d['total']})",
                 inline=False,
             )
-            embed.add_field(name="DSA library", value=f"{d['dsa_learned']}/{d['dsa_total']} learned", inline=True)
-            embed.add_field(name="Badges", value=d["badges"][:1024], inline=False)
-            embed.add_field(name="Last 7 days", value=f"`{d['spark']}` ({d['spark_total']} solved)", inline=False)
+            embed.add_field(
+                name="DSA",
+                value=f"{progress_bar(d['dsa_learned'], d['dsa_total'])} {d['dsa_learned']}/{d['dsa_total']}",
+                inline=False,
+            )
+            top_badges = _badge_list(d["totals"]["total"], d["clong"], d["week_rank"])[:3]
+            embed.add_field(
+                name="Badges",
+                value=" · ".join(top_badges) if top_badges else "No badges yet — solve to earn!",
+                inline=False,
+            )
         elif self.tab == "platforms":
             embed.add_field(name="Coding Platforms", value="\n".join(d["plat_lines"])[:1024], inline=False)
+            embed.add_field(name="All-time solved", value=str(d["totals"]["total"]), inline=True)
+            embed.add_field(name="Last 7 days", value=f"`{d['spark']}` ({d['spark_total']} solved)", inline=False)
         elif self.tab == "roadmap":
             embed.add_field(
                 name="Active path",

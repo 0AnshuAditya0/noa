@@ -75,6 +75,15 @@ def timezone_utc():
     return timezone.utc
 
 
+def week_label(ref: datetime | None = None) -> str:
+    """ISO week label of the week containing ref, e.g. '2026-W42'."""
+    ref = ref or now_local()
+    if ref.tzinfo is None:
+        ref = ref.replace(tzinfo=TZ)
+    year, week, _ = ref.isocalendar()
+    return f"{year}-W{week:02d}"
+
+
 def countdown_to_monday(ref: datetime | None = None) -> str:
     """'3d 4h' until next Monday 00:00 local."""
     ref = ref or now_local()

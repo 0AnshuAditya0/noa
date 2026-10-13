@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 import db
+import policy
 
 CONFIRM_TIMEOUT = 60
 
@@ -54,16 +55,45 @@ class Privacy(commands.Cog):
     async def privacy(self, ctx: commands.Context) -> None:
         """Explain in plain words what Noa stores about you."""
         embed = discord.Embed(title="Your privacy with Noa", color=discord.Color.blurple())
+        version, at = db.get_consent(ctx.author.id)
         embed.description = (
-            "Noa stores only what it needs to track your learning:\n"
-            "• Your Discord user ID, username, chosen path, experience, weekly hours and goal.\n"
-            "• Which roadmap topics and DSA entries you marked done, and when.\n"
-            "• Linked coding accounts (platform + handle) and their synced public stats.\n"
-            "• Daily activity used for streaks and leaderboards.\n\n"
-            "Noa never sees your password, email, or DMs, and never shares your data. "
-            f"Run `{ctx.prefix}deleteme` to erase everything."
+            policy.full_policy_text()
+            + f"\n\nYour consent: policy {version or '—'}"
+              f"{f' accepted {at[:10]}' if at else ''}."
+              f"\nRun `{ctx.prefix}export` for a copy of your data, "
+              f"`{ctx.prefix}deleteme` to erase everything."
         )
         await ctx.send(embed=embed)
+
+    @commands.command(name="export")
+    @commands.cooldown(1, 3600, commands.BucketType.user)
+    async def export(self, ctx: commands.Context) -> None:
+        """Download everything Noa stores about you as a JSON file."""
+        import io
+        import json
+        from datetime import datetime, timezone
+
+        payload = json.dumps(
+            {"user_id": ctx.author.id,
+             "exported_at": datetime.now(timezone.utc).isoformat(),
+             "tables": db.export_user_data(ctx.author.id)},
+            indent=2,
+            default=str,
+        ).encode("utf-8")
+        filename = f"noa-export-{ctx.author.id}.json"
+        warning = "This file contains your personal data — keep it private."
+        try:
+            await ctx.author.send(
+                content=warning,
+                file=discord.File(io.BytesIO(payload), filename=filename),
+            )
+        except (discord.Forbidden, discord.HTTPException):
+            await ctx.send(
+                content=f"{warning} (Could not DM you, so here it is:)",
+                file=discord.File(io.BytesIO(payload), filename=filename),
+            )
+            return
+        await ctx.send("Check your DMs — I sent your export there.")
 
     @commands.command(name="deleteme")
     async def deleteme(self, ctx: commands.Context) -> None:
