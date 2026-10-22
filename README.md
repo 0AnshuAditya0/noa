@@ -79,3 +79,16 @@ never touch the real `data/noa.db`.
 - `>register` / `>agree` — privacy consent comes first; declining stores nothing.
 - `>privacy` — what Noa stores, your consent version, plus `>export` (JSON copy, hourly cooldown) and `>deleteme`.
 - `>admin stats|sync|announce-now` — owner only, hidden from `>help`.
+
+## Points and ranks
+
+Solves earn points by difficulty: Easy 1 · Medium 3 · Hard 10. Lifetime
+points across verified linked platforms set your rank:
+
+Acolyte (0+) · Sentinel (250+) · Warden (600+) · Centurion (1200+) ·
+Archon (2200+) · Titan (3500+)
+
+The Problems leaderboard, weekly podium and announcements all rank by
+points for the period. `>ranks` shows every rank plus your progress to
+the next one. Set `USE_CUSTOM_EMOJIS=false` in `.env` for plain-text
+rank, platform and streak markers instead of custom emojis.
