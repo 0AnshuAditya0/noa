@@ -8,6 +8,7 @@ import discord
 from discord.ext import commands, tasks
 
 import db
+import emojis
 import tzutil
 
 logger = logging.getLogger(__name__)
@@ -24,25 +25,13 @@ def _is_owner(ctx: commands.Context) -> bool:
 
 def compute_week_board(guild: discord.Guild, week_start) -> tuple[str, list[dict]]:
     """Ranked rows for the week starting at week_start (local Monday 00:00),
-    reusing the leaderboard scoring (snapshot deltas + E/M/H + rating +
-    registered_at ordering)."""
-    from cogs.profile import _order_uids
+    reusing the shared leaderboard scoring (period points + solved +
+    rating + registered_at ordering)."""
+    from cogs.profile import ranked_period_rows
 
     member_ids = {m.id for m in guild.members if not m.bot}
     names = {m.id: m.display_name for m in guild.members}
-    verified = {r["user_id"] for r in db.list_verified_links() if r["user_id"] in member_ids}
-    start_date = week_start.date().isoformat()
-    uids = sorted(verified)
-    scores = db.window_scores(uids, start_date)
-    wcounts = db.solve_difficulty_counts(uids, tzutil.to_utc_iso(week_start))
-    weighted = {u: c["easy"] + 3 * c["medium"] + 5 * c["hard"] for u, c in wcounts.items()}
-    ordered = _order_uids(uids, scores, weighted, db.user_rank_info(uids))
-    dates = db.solve_dates_batch(uids)
-    rows = []
-    for uid in ordered:
-        cur, _ = db.streak_from_dates(dates.get(uid, []))
-        rows.append({"uid": uid, "name": names.get(uid, str(uid)),
-                     "items": scores.get(uid, 0), "streak": cur})
+    rows = ranked_period_rows(member_ids, names, week_start.date().isoformat())
     return tzutil.week_label(week_start), rows
 
 
@@ -53,14 +42,14 @@ def compute_last_week_board(guild: discord.Guild) -> tuple[str, list[dict]]:
 
 
 def build_podium_embed(week_label: str, rows: list[dict]) -> discord.Embed | None:
-    """Top-3 embed, or None when nobody scored (caller still records the week)."""
-    scorers = [r for r in rows if r["items"] > 0][:3]
+    """Top-3 embed by points, or None when nobody scored (caller still records the week)."""
+    scorers = [r for r in rows if r.get("points", r.get("items", 0)) > 0][:3]
     if not scorers:
         return None
     embed = discord.Embed(title=f"Weekly podium — {week_label}", color=discord.Color.gold())
-    medals = ["🥇", "🥈", "🥉"]
     embed.description = "\n".join(
-        f"{medals[i]} **{r['name']}** — {r['items']} solved · 🔥 {r['streak']}d"
+        f"{emojis.podium_medal(i)} **{r['name']}** — {r.get('points', r.get('items', 0))} pts · "
+        f"{r.get('items', 0)} solved · {emojis.STREAK} {r['streak']}d"
         for i, r in enumerate(scorers)
     )[:4000]
     footer = "Next week starts now, keep grinding"

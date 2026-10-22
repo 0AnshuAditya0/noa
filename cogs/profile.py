@@ -5,6 +5,8 @@ import discord
 from discord.ext import commands
 
 import db
+import emojis
+import points
 import roadmaps
 import tzutil
 from cogs.roadmap import _bar
@@ -21,15 +23,10 @@ KNOWN_PLATFORMS: list[tuple[str, str]] = [
     ("leetcode", "LeetCode"),
     ("atcoder", "AtCoder"),
 ]
-PLATFORM_SHORT = {"codeforces": "CF", "leetcode": "LC", "atcoder": "AC"}
 PERIODS = ("week", "lastweek", "month", "year", "all")
 BARS = "▁▂▃▄▅▆▇█"
 
 _PROFILE_CACHE: dict[tuple[int, int], tuple[float, dict]] = {}
-
-
-def _short(platform: str) -> str:
-    return PLATFORM_SHORT.get(platform, platform[:2].upper())
 
 
 def _rel_time(iso: str | None) -> str:
@@ -98,15 +95,53 @@ def _period_window(period: str) -> tuple[str, str | None, str]:
     return start.date().isoformat(), prev.date().isoformat(), f"This week · resets in {tzutil.countdown_to_monday()}"
 
 
-def _order_uids(uids: list[int], scores: dict[int, int], weighted: dict[int, int],
+def _order_uids(uids: list[int], points: dict[int, int], counts: dict[int, int],
                 info: dict[int, tuple[int | None, str]]) -> list[int]:
-    """Score desc, weighted E/M/H desc, best rating desc (NULLs last), registered_at asc."""
+    """Points desc, solved desc, best rating desc (NULLs last), registered_at asc."""
 
     def key(uid: int):
         best, reg = info.get(uid, (None, ""))
-        return (-scores.get(uid, 0), -weighted.get(uid, 0), best is None, -(best or 0), reg)
+        return (-points.get(uid, 0), -counts.get(uid, 0), best is None, -(best or 0), reg)
 
     return sorted(uids, key=key)
+
+
+def ranked_period_rows(member_ids: set[int], names: dict[int, str],
+                       start_date: str, prev_start: str | None = None) -> list[dict]:
+    """Ordered Problems-board rows for a snapshot window, shared by the
+    leaderboard, the podium command and the announce job.
+
+    Ranked by period points desc, solved desc, best rating desc, registered
+    asc. Each row: uid/name/points/items/streak/tags/rank_emoji/move.
+    """
+    verified = {r["user_id"] for r in db.list_verified_links() if r["user_id"] in member_ids}
+    uids = sorted(verified)
+    pts = db.period_points_batch(uids, start_date)
+    counts = db.window_scores(uids, start_date)
+    info = db.user_rank_info(uids)
+    ordered = _order_uids(uids, pts, counts, info)
+    prev_ranks: dict[int, int] = {}
+    if prev_start is not None:
+        prev_pts = db.period_points_batch(uids, prev_start)
+        prev_counts = db.window_scores(uids, prev_start)
+        prev_ranks = {uid: i + 1 for i, uid in enumerate(_order_uids(uids, prev_pts, prev_counts, info))}
+    dates = db.solve_dates_batch(uids)
+    tags = db.verified_platforms_batch(uids, start_date)
+    lifetime = db.lifetime_points_batch(uids)
+    rows = []
+    for rank, uid in enumerate(ordered, start=1):
+        cur, _ = db.streak_from_dates(dates.get(uid, []))
+        rows.append({
+            "uid": uid,
+            "name": names.get(uid, str(uid)),
+            "points": pts.get(uid, 0),
+            "items": counts.get(uid, 0),
+            "streak": cur,
+            "tags": " ".join(emojis.platform_emoji(p) for p in tags.get(uid, [])) or "—",
+            "rank_emoji": emojis.rank_emoji(points.rank_for_points(lifetime.get(uid, 0))),
+            "move": _move_arrow(rank, prev_ranks.get(uid)),
+        })
+    return rows
 
 
 def _move_arrow(rank: int, prev_rank: int | None) -> str | None:
@@ -137,11 +172,11 @@ def _badges(total: int, clong: int, week_rank: int | None) -> str:
 def _badge_list(total: int, clong: int, week_rank: int | None) -> list[str]:
     badges: list[str] = []
     if clong >= 100:
-        badges.append("🔥 Century Streak (100d)")
+        badges.append(f"{emojis.STREAK} Century Streak (100d)")
     elif clong >= 30:
-        badges.append("🔥 Month Streak (30d)")
+        badges.append(f"{emojis.STREAK} Month Streak (30d)")
     elif clong >= 7:
-        badges.append("🔥 Week Streak (7d)")
+        badges.append(f"{emojis.STREAK} Week Streak (7d)")
     if total >= 1000:
         badges.append("🏆 1000 Solved")
     elif total >= 500:
@@ -149,7 +184,7 @@ def _badge_list(total: int, clong: int, week_rank: int | None) -> list[str]:
     elif total >= 100:
         badges.append("💯 100 Solved")
     if week_rank is not None and week_rank <= 3:
-        badges.append("🥉 Top 3 This Week")
+        badges.append(f"{emojis.podium_medal(2)} Top 3 This Week")
     return badges
 
 
@@ -210,30 +245,50 @@ class Profile(commands.Cog):
 
     @leaderboard.command(name="podium")
     async def podium(self, ctx: commands.Context) -> None:
-        """Show last week's top 3 with their counts."""
+        """Show last week's top 3 by points."""
         if ctx.guild is None:
             await ctx.send("Run this command in a server, not DMs.")
             return
         member_ids = {m.id for m in ctx.guild.members if not m.bot}
         names = {m.id: m.display_name for m in ctx.guild.members}
-        verified = {r["user_id"] for r in db.list_verified_links() if r["user_id"] in member_ids}
         start, _ = tzutil.last_week_range()
-        scores = db.window_scores(sorted(verified), start.date().isoformat())
-        weighted = {
-            uid: c["easy"] + 3 * c["medium"] + 5 * c["hard"]
-            for uid, c in db.solve_difficulty_counts(sorted(verified), tzutil.to_utc_iso(start)).items()
-        }
-        ordered = _order_uids(sorted(verified), scores, weighted, db.user_rank_info(sorted(verified)))
-        top = [(uid, scores.get(uid, 0)) for uid in ordered if scores.get(uid, 0) > 0][:3]
+        rows = ranked_period_rows(member_ids, names, start.date().isoformat())
+        top = [r for r in rows if r["points"] > 0][:3]
         embed = discord.Embed(title="Podium — last week", color=discord.Color.gold())
         if not top:
             embed.description = "No podium yet — nobody scored last week."
         else:
-            medals = ["🥇", "🥈", "🥉"]
             embed.description = "\n".join(
-                f"{medals[i]} **{names.get(uid, str(uid))}** — {score} solved"
-                for i, (uid, score) in enumerate(top)
+                f"{emojis.podium_medal(i)} **{r['name']}** — {r['points']} pts · {r['items']} solved"
+                for i, r in enumerate(top)
             )[:4000]
+        await ctx.send(embed=embed)
+
+    @commands.command(name="ranks")
+    async def ranks(self, ctx: commands.Context) -> None:
+        """Show all points ranks, thresholds, weights and your progress."""
+        embed = discord.Embed(title="Points ranks", color=discord.Color.gold())
+        embed.description = "\n".join(
+            f"{emojis.rank_emoji(r['name'])} **{r['name']}** — {r['threshold']}+ pts"
+            for r in points.RANKS
+        )[:4000]
+        embed.add_field(
+            name="Weights",
+            value=f"Easy {points.EASY_POINTS} · Medium {points.MEDIUM_POINTS} · Hard {points.HARD_POINTS}",
+            inline=False,
+        )
+        user = db.get_user(ctx.author.id)
+        if user is not None:
+            total = db.lifetime_points(ctx.author.id)
+            cur, nxt, _into, need = points.progress_to_next(total)
+            if nxt is None:
+                progress = f"{emojis.rank_emoji(cur)} **{cur}** — {total} pts · max rank!"
+            else:
+                progress = (
+                    f"{emojis.rank_emoji(cur)} **{cur}** — {total} pts · "
+                    f"{need} more to {emojis.rank_emoji(nxt)} **{nxt}**"
+                )
+            embed.add_field(name="You", value=progress[:1024], inline=False)
         await ctx.send(embed=embed)
 
 
@@ -256,7 +311,7 @@ def _compute_profile_data(guild: discord.Guild | None, target_id: int, prefix: s
     plat_lines = [_platform_line(target_id, plat, label, prefix) for plat, label in KNOWN_PLATFORMS]
     plat_lines.append(
         f"Total: {totals['total']} solved across verified platforms | "
-        f"coding streak 🔥 {ccur}d (longest {clong}d)"
+        f"coding streak {emojis.STREAK} {ccur}d (longest {clong}d)"
     )
     lib = _dsa.load_dsa()
     learned = db.learned_ids(target_id)
@@ -274,14 +329,12 @@ def _compute_profile_data(guild: discord.Guild | None, target_id: int, prefix: s
         verified = {r["user_id"] for r in db.list_verified_links() if r["user_id"] in member_ids}
         if target_id in verified:
             uids = sorted(verified)
-            scores = db.window_scores(uids, week_start.date().isoformat())
-            weighted = {
-                uid: c["easy"] + 3 * c["medium"] + 5 * c["hard"]
-                for uid, c in db.solve_difficulty_counts(uids, tzutil.to_utc_iso(week_start)).items()
-            }
-            ordered = _order_uids(uids, scores, weighted, db.user_rank_info(uids))
+            start_date = week_start.date().isoformat()
+            pts = db.period_points_batch(uids, start_date)
+            counts = db.window_scores(uids, start_date)
+            ordered = _order_uids(uids, pts, counts, db.user_rank_info(uids))
             week_rank = ordered.index(target_id) + 1
-            week_scores = scores
+            week_scores = counts
     week_solved = week_scores.get(target_id, 0)
     week_days = [(week_start + timedelta(days=i)).date().isoformat() for i in range(7)]
     sums = db.daily_sums(target_id, week_days[0])
@@ -379,7 +432,7 @@ class ProfileView(discord.ui.View):
             )
             embed.add_field(
                 name="Coding streak",
-                value=f"🔥 {d['ccur']}d (longest {d['clong']}d)",
+                value=f"{emojis.STREAK} {d['ccur']}d (longest {d['clong']}d)",
                 inline=False,
             )
             embed.add_field(
@@ -413,7 +466,7 @@ class ProfileView(discord.ui.View):
             embed.add_field(name="Goal", value=str(user.get("goal") or "—"), inline=False)
             embed.add_field(name="Registered", value=str(user.get("registered_at", "—"))[:10], inline=True)
             embed.add_field(name="Items completed", value=str(d["done_n"]), inline=True)
-            embed.add_field(name="Roadmap streak", value=f"🔥 {d['rcur']}d current · {d['rlong']}d longest", inline=False)
+            embed.add_field(name="Roadmap streak", value=f"{emojis.STREAK} {d['rcur']}d current · {d['rlong']}d longest", inline=False)
         else:
             embed.add_field(
                 name="DSA library",
@@ -503,55 +556,27 @@ class LeaderboardView(discord.ui.View):
             board = db.problems_board()
             in_scope = [r for r in board if r["user_id"] in member_ids]
             ids = [r["user_id"] for r in in_scope]
+            totals = {r["user_id"]: r["total"] for r in in_scope}
+            lifetime = db.lifetime_points_batch(ids)
+            ordered = _order_uids(ids, lifetime, totals, db.user_rank_info(ids))
             dates = db.solve_dates_batch(ids)
             tags = db.verified_platforms_batch(ids)
             rows: list[dict] = []
-            for r in in_scope:
-                uid = r["user_id"]
+            for rank, uid in enumerate(ordered, start=1):
                 cur, _ = db.streak_from_dates(dates.get(uid, []))
                 rows.append({
                     "uid": uid,
                     "name": names.get(uid, str(uid)),
-                    "items": r["total"],
+                    "points": lifetime.get(uid, 0),
+                    "items": totals.get(uid, 0),
                     "streak": cur,
-                    "tags": "+".join(_short(p) for p in tags.get(uid, [])) or "—",
+                    "tags": " ".join(emojis.platform_emoji(p) for p in tags.get(uid, [])) or "—",
+                    "rank_emoji": emojis.rank_emoji(points.rank_for_points(lifetime.get(uid, 0))),
                     "move": None,
                 })
-            return rows  # already ordered by SQL
+            return rows
         start_date, prev_start, _ = _period_window(self.period)
-        verified = {r["user_id"] for r in db.list_verified_links() if r["user_id"] in member_ids}
-        uids = sorted(verified)
-        scores = db.window_scores(uids, start_date)
-        start_dt = tzutil.monday_00() if self.period in ("week", "lastweek") else None
-        if self.period == "month":
-            start_dt, _ = tzutil.this_month_range()
-        elif self.period == "year":
-            start_dt, _ = tzutil.this_year_range()
-        wcounts = db.solve_difficulty_counts(uids, tzutil.to_utc_iso(start_dt))
-        weighted = {u: c["easy"] + 3 * c["medium"] + 5 * c["hard"] for u, c in wcounts.items()}
-        info = db.user_rank_info(uids)
-        ordered = _order_uids(uids, scores, weighted, info)
-        prev_ranks: dict[int, int] = {}
-        if prev_start is not None:
-            prev_scores = db.window_scores(uids, prev_start)
-            pcounts = db.solve_difficulty_counts(uids, tzutil.to_utc_iso(
-                start_dt - timedelta(days=7)))
-            prev_weighted = {u: c["easy"] + 3 * c["medium"] + 5 * c["hard"] for u, c in pcounts.items()}
-            prev_ranks = {uid: i + 1 for i, uid in enumerate(_order_uids(uids, prev_scores, prev_weighted, info))}
-        dates = db.solve_dates_batch(uids)
-        tags = db.verified_platforms_batch(uids, start_date)
-        rows = []
-        for rank, uid in enumerate(ordered, start=1):
-            cur, _ = db.streak_from_dates(dates.get(uid, []))
-            rows.append({
-                "uid": uid,
-                "name": names.get(uid, str(uid)),
-                "items": scores.get(uid, 0),
-                "streak": cur,
-                "tags": "+".join(_short(p) for p in tags.get(uid, [])) or "—",
-                "move": _move_arrow(rank, prev_ranks.get(uid)),
-            })
-        return rows
+        return ranked_period_rows(member_ids, names, start_date, prev_start)
 
     def render(self) -> discord.Embed | None:
         if self.board == "roadmap" and self._roadmap_pid is None:
@@ -569,16 +594,15 @@ class LeaderboardView(discord.ui.View):
             else:
                 lines = []
                 for rank, r in enumerate(rows[self.page * PAGE_SIZE:(self.page + 1) * PAGE_SIZE], start=self.page * PAGE_SIZE + 1):
-                    medal = {1: "🥇", 2: "🥈", 3: "🥉"}.get(rank, f"`{rank}`")
                     move = f" {r['move']}" if r.get("move") else ""
                     lines.append(
-                        f"{medal} **{r['name']}** — {r['items']} solved · 🔥 {r['streak']}d{move}\n"
-                        f"└ `{r['tags']}`"
+                        f"{r['rank_emoji']} **{r['name']}** — {r['points']} pts · {r['items']} solved · {emojis.STREAK} {r['streak']}d{move}\n"
+                        f"└ {r['tags']}"
                     )
                 embed.description = "\n".join(lines)[:4000]
             pages = max(1, (len(rows) + PAGE_SIZE - 1) // PAGE_SIZE)
             self.page = max(0, min(self.page, pages - 1))
-            embed.set_footer(text=f"Page {self.page + 1}/{pages} · Not on the board? Link an account with {self.prefix}link")
+            embed.set_footer(text=f"Page {self.page + 1}/{pages} · Easy 1 · Medium 3 · Hard 10 · Not on the board? Link an account with {self.prefix}link")
             self._refresh_buttons(pages)
             return embed
         mode_label = "All time" if self.mode == "all" else "This week"
@@ -591,8 +615,7 @@ class LeaderboardView(discord.ui.View):
         else:
             lines = []
             for rank, r in enumerate(rows[self.page * PAGE_SIZE:(self.page + 1) * PAGE_SIZE], start=self.page * PAGE_SIZE + 1):
-                medal = {1: "🥇", 2: "🥈", 3: "🥉"}.get(rank, f"`{rank}`")
-                lines.append(f"{medal} **{r['name']}** — {r['items']} items · {r['pct']}% · 🔥 {r['streak']}d")
+                lines.append(f"{emojis.podium_medal(rank - 1)} **{r['name']}** — {r['items']} items · {r['pct']}% · {emojis.STREAK} {r['streak']}d")
             embed.description = "\n".join(lines)[:4000]
         embed.set_footer(text=f"Page {self.page + 1}/{pages}")
         self._refresh_buttons(pages)

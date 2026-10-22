@@ -53,7 +53,10 @@ async def sync_one(adapter, user_id: int, platform: str, handle: str, since: str
     stats["new_solves"] = new
     import tzutil
 
-    db.upsert_snapshot(user_id, platform, tzutil.today_str(), stats["total_solved"])
+    db.upsert_snapshot(
+        user_id, platform, tzutil.today_str(), stats["total_solved"],
+        easy=stats.get("easy"), medium=stats.get("medium"), hard=stats.get("hard"),
+    )
     return stats
 
 

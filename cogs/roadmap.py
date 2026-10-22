@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 import db
+import emojis
 import roadmaps
 
 BAR_LEN = 12
@@ -64,7 +65,7 @@ def _topic_page_embed(path_id: str, data: dict, index: int, user_id: int) -> dis
     pct = round(overall_n / total * 100) if total else 0
     current, _ = db.get_streaks(user_id)
     embed.set_footer(
-        text=f"Topic {index + 1}/{len(topics)} · {done_n}/{len(subs)} · Overall {_bar(pct)} {pct}% ({overall_n}/{total}) · 🔥 {current}"
+        text=f"Topic {index + 1}/{len(topics)} · {done_n}/{len(subs)} · Overall {_bar(pct)} {pct}% ({overall_n}/{total}) · {emojis.STREAK} {current}"
     )
     return embed
 
@@ -396,7 +397,7 @@ class Roadmap(commands.Cog):
                 value=f"`{_bar(pct)}` {pct}% ({done_n}/{total})",
                 inline=False,
             )
-        embed.set_footer(text=f"🔥 Current streak: {current}d · Longest: {longest}d")
+        embed.set_footer(text=f"{emojis.STREAK} Current streak: {current}d · Longest: {longest}d")
         await ctx.send(embed=embed)
 
 

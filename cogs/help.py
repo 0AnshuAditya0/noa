@@ -33,6 +33,7 @@ COMMAND_META: dict[str, dict] = {
     "unfinish": {"usage": "<id> [path]", "examples": ["unfinish 05.2"]},
     "progress": {"usage": "[path]", "examples": ["progress"]},
     "profile": {"usage": "[@user]", "examples": ["profile", "profile @Noa"]},
+    "ranks": {"examples": ["ranks"]},
     "leaderboard": {"examples": ["leaderboard"]},
     "leaderboard podium": {"examples": ["leaderboard podium"]},
     "link": {"usage": "<platform> <handle>", "examples": ["link codeforces tourist"]},
