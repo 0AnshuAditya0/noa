@@ -184,6 +184,10 @@ def init_db() -> None:
             """
         )
         conn.execute("CREATE INDEX IF NOT EXISTS idx_snap_user_date ON stats_snapshots (user_id, date)")
+        scols = [row[1] for row in conn.execute("PRAGMA table_info(stats_snapshots)")]
+        for _col in ("easy", "medium", "hard"):
+            if _col not in scols:
+                conn.execute(f"ALTER TABLE stats_snapshots ADD COLUMN {_col} INTEGER")
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS guild_settings (
@@ -760,9 +764,10 @@ def coding_streak(user_id: int) -> tuple[int, int]:
 
 
 def problems_board(since: str | None = None) -> list[dict[str, Any]]:
-    """One ordered aggregate: users WITH a verified account, ranked by daily
-    total desc, best rating desc (NULLs last), registered_at asc. `since` is a
-    UTC date string (week = trailing 7 days from platform_daily)."""
+    """Users WITH a verified account plus their solved totals and best rating.
+
+    Totals come from platform_daily (weeks) or platform_stats (all time).
+    Callers order by points; the SQL keeps a sensible default order."""
     init_db()
     with _connect() as conn:
         conn.row_factory = sqlite3.Row
@@ -939,13 +944,23 @@ def admin_stats() -> dict[str, Any]:
 # solve history count fairly.
 
 
-def upsert_snapshot(user_id: int, platform: str, date: str, total_solved: int) -> None:
-    """Write the day's latest total (REPLACE keeps one row per day)."""
+def upsert_snapshot(
+    user_id: int,
+    platform: str,
+    date: str,
+    total_solved: int,
+    easy: int | None = None,
+    medium: int | None = None,
+    hard: int | None = None,
+) -> None:
+    """Write the day's latest totals (REPLACE keeps one row per day)."""
     init_db()
     with _connect() as conn:
         conn.execute(
-            "INSERT OR REPLACE INTO stats_snapshots (user_id, platform, date, total_solved) VALUES (?, ?, ?, ?)",
-            (user_id, platform, date, total_solved),
+            "INSERT OR REPLACE INTO stats_snapshots "
+            "(user_id, platform, date, total_solved, easy, medium, hard) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (user_id, platform, date, total_solved, easy, medium, hard),
         )
 
 
@@ -959,7 +974,7 @@ def get_snapshots(user_ids: list[int]) -> list[dict[str, Any]]:
         placeholders = ",".join("?" for _ in user_ids)
         cur = conn.execute(
             f"""
-            SELECT s.user_id, s.platform, s.date, s.total_solved
+            SELECT s.user_id, s.platform, s.date, s.total_solved, s.easy, s.medium, s.hard
             FROM stats_snapshots s
             JOIN linked_accounts l ON l.user_id = s.user_id AND l.platform = s.platform
             WHERE s.user_id IN ({placeholders}) AND l.verified = 1
@@ -968,6 +983,86 @@ def get_snapshots(user_ids: list[int]) -> list[dict[str, Any]]:
             tuple(user_ids),
         )
         return [dict(row) for row in cur.fetchall()]
+
+
+def lifetime_points_batch(user_ids: list[int]) -> dict[int, int]:
+    """Lifetime points per user: weighted platform_stats buckets over VERIFIED
+    platforms only. Buckets short of the total count the remainder as medium.
+    Roadmap progress and dsa_learned never add points."""
+    if not user_ids:
+        return {}
+    from points import HARD_POINTS, MEDIUM_POINTS, EASY_POINTS
+
+    init_db()
+    with _connect() as conn:
+        placeholders = ",".join("?" for _ in user_ids)
+        cur = conn.execute(
+            f"""
+            SELECT ps.user_id,
+                   COALESCE(SUM(
+                       ps.easy * {EASY_POINTS}
+                       + ps.medium * {MEDIUM_POINTS}
+                       + ps.hard * {HARD_POINTS}
+                       + MAX(0, ps.total_solved - (ps.easy + ps.medium + ps.hard)) * {MEDIUM_POINTS}
+                   ), 0) AS points
+            FROM platform_stats ps
+            JOIN linked_accounts l ON l.user_id = ps.user_id AND l.platform = ps.platform
+            WHERE ps.user_id IN ({placeholders}) AND l.verified = 1
+            GROUP BY ps.user_id
+            """,
+            tuple(user_ids),
+        )
+        out = {row[0]: row[1] for row in cur.fetchall()}
+    for uid in user_ids:
+        out.setdefault(uid, 0)
+    return out
+
+
+def lifetime_points(user_id: int) -> int:
+    """Lifetime points for one user (verified platforms only)."""
+    return lifetime_points_batch([user_id]).get(user_id, 0)
+
+
+def period_points_batch(user_ids: list[int], start_date: str) -> dict[int, int]:
+    """Points earned in a window starting at a local date string.
+
+    Per platform: weighted bucket deltas between the latest snapshot and the
+    last snapshot strictly before the window start (else the earliest one),
+    each bucket clamped at 0. If the baseline row has NULL buckets (old rows),
+    the platform's total delta counts as medium. Mid-week joiners only count
+    from their first snapshot.
+    """
+    from points import HARD_POINTS, MEDIUM_POINTS, EASY_POINTS
+
+    def _bucketed(latest: tuple, base: tuple) -> int:
+        _, _, le, me, he = latest
+        _, _, be, bm, bh = base
+        if None in (le, me, he, be, bm, bh):
+            return max(0, latest[1] - base[1]) * MEDIUM_POINTS
+        return (
+            max(0, le - be) * EASY_POINTS
+            + max(0, me - bm) * MEDIUM_POINTS
+            + max(0, he - bh) * HARD_POINTS
+        )
+
+    rows = get_snapshots(user_ids)
+    by_pair: dict[tuple[int, str], list[tuple[str, int, int | None, int | None, int | None]]] = {}
+    for row in rows:
+        by_pair.setdefault((row["user_id"], row["platform"]), []).append(
+            (row["date"], row["total_solved"], row.get("easy"), row.get("medium"), row.get("hard"))
+        )
+    out: dict[int, int] = {}
+    for (uid, _), points in by_pair.items():
+        points.sort()
+        latest = points[-1]
+        base = points[0]
+        for point in points:
+            if point[0] < start_date:
+                base = point
+        out[uid] = out.get(uid, 0) + _bucketed(latest, base)
+    for uid in user_ids:
+        out.setdefault(uid, 0)
+    return out
 
 
 def score_from_snapshots(rows: list[dict[str, Any]], start_date: str) -> dict[int, int]:
